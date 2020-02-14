@@ -22,7 +22,7 @@
         "sylapi/courier": "dev-master"
     },
     "autoload": {
-        "psr-4": { "Sylapi\\Gls\\" : "src/" }
+        "psr-4": { "Sylapi\\Courier\\Gls\\" : "src/" }
     },
     "prefer-stable": false
 }

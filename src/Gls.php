@@ -94,7 +94,12 @@ class Gls extends Connect
             $adePreparingBoxInsert = new adePickup_GetParcelLabel();
             $adePreparingBoxInsert->prepareData($this->parameters)->call($this->client, $this->session);
 
-            $this->setResponse($adePreparingBoxInsert->getResponse());
+            $response = $adePreparingBoxInsert->getResponse();
+            if (!empty($response)) {
+                $response = base64_decode($response);
+            }
+
+            $this->setResponse($response);
             $this->setError($adePreparingBoxInsert->getError());
         }
     }

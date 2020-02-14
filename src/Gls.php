@@ -4,8 +4,6 @@ namespace Sylapi\Courier\Gls;
 use Sylapi\Courier\Gls\Message\adePreparingBox_Insert;
 use Sylapi\Courier\Gls\Message\adePickup_GetParcelLabel;
 use Sylapi\Courier\Gls\Message\adePreparingBox_DeleteConsign;
-use Sylapi\Courier\Gls\Message\adePickup_GetConsignLabelsExt;
-use Sylapi\Courier\Gls\Message\adePickup_GetConsignLabels;
 use Sylapi\Courier\Gls\Message\adePickup_GetConsignIDs;
 use Sylapi\Courier\Gls\Message\adePickup_GetConsign;
 use Sylapi\Courier\Gls\Message\adePickup_Create;

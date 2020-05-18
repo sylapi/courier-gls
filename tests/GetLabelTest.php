@@ -20,23 +20,24 @@ class GetLabelTest extends PHPUnitTestCase
 
         $params = [
             'accessData' => [
-                'login' => 'login',
-                'password' => 'password'
+                'login'    => 'login',
+                'password' => 'password',
             ],
             'tracking_id' => '123456',
-            'format' => 'A6'
+            'format'      => 'A6',
         ];
 
         $this->gls->initialize($params);
     }
 
-
     public function testGetLabelSuccess()
     {
-        $localXml = file_get_contents(__DIR__ . '/Mock/adePickup_GetParcelLabelSuccess.xml');
+        $localXml = file_get_contents(__DIR__.'/Mock/adePickup_GetParcelLabelSuccess.xml');
 
-        $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue(
-            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA))
+        $this->soapMock->expects($this->any())->method('__call')->will(
+            $this->returnValue(
+            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA)
+        )
         );
 
         $this->gls->setSoapClient($this->soapMock);
@@ -49,12 +50,13 @@ class GetLabelTest extends PHPUnitTestCase
 
     public function testGetLabelFailure()
     {
-        $localXml = file_get_contents(__DIR__ . '/Mock/adePickup_GetParcelLabelFailure.xml');
+        $localXml = file_get_contents(__DIR__.'/Mock/adePickup_GetParcelLabelFailure.xml');
 
-        $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue(
-            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA))
+        $this->soapMock->expects($this->any())->method('__call')->will(
+            $this->returnValue(
+            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA)
+        )
         );
-
 
         $this->gls->setSoapClient($this->soapMock);
         $this->gls->GetLabel();

@@ -10,44 +10,49 @@ class adePreparingBox_DeleteConsign
     public function prepareData($prepare_id)
     {
         $this->data['prepare_id'] = $prepare_id;
+
         return $this;
     }
 
-    public function call($client, $session) {
-
+    public function call($client, $session)
+    {
         try {
-
-            $params = array(
+            $params = [
                 'session' => $session,
-                'id' => $this->data['prepare_id'],
-            );
+                'id'      => $this->data['prepare_id'],
+            ];
 
             $this->response = $client->adePreparingBox_DeleteConsign($params);
-        }
-        catch (\SoapFault $e) {
+        } catch (\SoapFault $e) {
             $this->response['error'] = $e->faultactor;
         }
     }
 
-    public function getResponse() {
+    public function getResponse()
+    {
         if (!empty($this->response->return->id) && $this->response->return->id > 0) {
             return $this->response->return->id;
         }
+
         return null;
     }
 
-    public function isSuccess() {
+    public function isSuccess()
+    {
         if (!empty($this->response->return->id) && $this->response->return->id > 0) {
             return true;
         }
+
         return false;
     }
 
-    public function getError() {
+    public function getError()
+    {
         return (!empty($this->response['error'])) ? $this->response['error'] : null;
     }
 
-    public function getCode() {
+    public function getCode()
+    {
         return (!empty($this->response['code'])) ? $this->response['code'] : 0;
     }
 }

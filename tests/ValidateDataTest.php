@@ -10,30 +10,30 @@ class ValidateDataTest extends PHPUnitTestCase
     private $soapMock = null;
 
     private $address = [
-        'name' => 'Name Username',
-        'company' => '',
-        'street' => 'Street 1',
+        'name'     => 'Name Username',
+        'company'  => '',
+        'street'   => 'Street 1',
         'postcode' => '12-123',
-        'city' => 'Warszawa',
-        'country' => 'PL',
-        'phone' => '600600600',
-        'email' => 'name@example.com'
+        'city'     => 'Warszawa',
+        'country'  => 'PL',
+        'phone'    => '600600600',
+        'email'    => 'name@example.com',
     ];
 
     private $options = [
-        'weight' => 3.00,
-        'width' => 30.00,
-        'height' => 50.00,
-        'depth' => 10.00,
-        'amount' => 2.10,
+        'weight'      => 3.00,
+        'width'       => 30.00,
+        'height'      => 50.00,
+        'depth'       => 10.00,
+        'amount'      => 2.10,
         'bank_number' => '29100010001000100010001000',
-        'cod' => false,
-        'saturday' => false,
-        'custom' => [
+        'cod'         => false,
+        'saturday'    => false,
+        'custom'      => [
             'parcel_cost' => 8,
         ],
         'references' => 'order #1234',
-        'note' => 'Note'
+        'note'       => 'Note',
     ];
 
     public function __construct($name = null, array $data = [], $dataName = '')
@@ -44,12 +44,12 @@ class ValidateDataTest extends PHPUnitTestCase
 
         $params = [
             'accessData' => [
-                'login' => 'login',
-                'password' => 'password'
+                'login'    => 'login',
+                'password' => 'password',
             ],
-            'sender' => $this->address,
+            'sender'   => $this->address,
             'receiver' => $this->address,
-            'options' => $this->options,
+            'options'  => $this->options,
         ];
 
         $this->gls = new Gls();
@@ -57,13 +57,14 @@ class ValidateDataTest extends PHPUnitTestCase
         $this->gls->initialize($params);
     }
 
-
     public function testValidateAddressSuccess()
     {
-        $localXml = file_get_contents(__DIR__ . '/Mock/adePreparingBox_InsertSuccess.xml');
+        $localXml = file_get_contents(__DIR__.'/Mock/adePreparingBox_InsertSuccess.xml');
 
-        $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue(
-            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA))
+        $this->soapMock->expects($this->any())->method('__call')->will(
+            $this->returnValue(
+            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA)
+        )
         );
 
         $this->gls->setSoapClient($this->soapMock);
@@ -76,10 +77,12 @@ class ValidateDataTest extends PHPUnitTestCase
 
     public function testValidateAddressFailure()
     {
-        $localXml = file_get_contents(__DIR__ . '/Mock/adePreparingBox_InsertFailure.xml');
+        $localXml = file_get_contents(__DIR__.'/Mock/adePreparingBox_InsertFailure.xml');
 
-        $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue(
-            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA))
+        $this->soapMock->expects($this->any())->method('__call')->will(
+            $this->returnValue(
+            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA)
+        )
         );
 
         $this->gls->setSoapClient($this->soapMock);

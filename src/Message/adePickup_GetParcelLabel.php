@@ -56,7 +56,7 @@ class adePickup_GetParcelLabel
 
     public function getResponse() {
         if (!empty($this->response['return']->return->labels)) {
-            return $this->response['return']->return->labels;
+            return base64_decode($this->response['return']->return->labels);
         }
         return null;
     }

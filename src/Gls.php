@@ -3,6 +3,7 @@ namespace Sylapi\Courier\Gls;
 
 use Sylapi\Courier\Gls\Message\adePreparingBox_Insert;
 use Sylapi\Courier\Gls\Message\adePickup_GetParcelLabel;
+use Sylapi\Courier\Gls\Message\adePickup_GetParcelLabels;
 use Sylapi\Courier\Gls\Message\adePreparingBox_DeleteConsign;
 use Sylapi\Courier\Gls\Message\adePickup_GetConsignIDs;
 use Sylapi\Courier\Gls\Message\adePickup_GetConsign;
@@ -101,6 +102,20 @@ class Gls extends Connect
 
             $this->setResponse($response);
             $this->setError($adePreparingBoxInsert->getError());
+        }
+    }
+
+    public function GetLabels()
+    {
+        $this->login();
+
+        if ($this->isSession()) {
+
+            $adePickupGetParcelLabels = new adePickup_GetParcelLabels();
+            $adePickupGetParcelLabels->prepareData($this->parameters)->call($this->client, $this->session);
+
+            $this->setResponse($adePickupGetParcelLabels->getResponse());
+            $this->setError($adePickupGetParcelLabels->getError());
         }
     }
 

@@ -35,7 +35,7 @@ class adePreparingBox_Insert
             ),
             'srv_bool' => array(
                 'cod' => ($parameters['options']['cod'] == true) ? true : false,
-                'cod_amount' => ($parameters['options']['cod'] == true) ? : '',
+                'cod_amount' => ($parameters['options']['cod'] == true) ? $parameters['options']['amount'] : '',
                 's10' => false,
                 's12' => false,
                 'sat' => false,

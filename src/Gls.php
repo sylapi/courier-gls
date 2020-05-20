@@ -96,9 +96,6 @@ class Gls extends Connect
             $adePreparingBoxInsert->prepareData($this->parameters)->call($this->client, $this->session);
 
             $response = $adePreparingBoxInsert->getResponse();
-            if (!empty($response)) {
-                $response = base64_decode($response);
-            }
 
             $this->setResponse($response);
             $this->setError($adePreparingBoxInsert->getError());

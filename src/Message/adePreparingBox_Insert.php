@@ -8,11 +8,13 @@ class adePreparingBox_Insert
 
     public function prepareData($parameters) {
 
+        $counties_map = array('uk' => 'gb');
+
         $this->data = array(
             'rname1' => $parameters['receiver']['name'],
             'rname2' => '',
             'rname3' => '',
-            'rcountry' => $parameters['receiver']['country'],
+            'rcountry' => strtr(strtolower($parameters['receiver']['country']), $counties_map),
             'rzipcode' => $parameters['receiver']['postcode'],
             'rcity' => $parameters['receiver']['city'],
             'rstreet' => $parameters['receiver']['street'],
@@ -28,7 +30,7 @@ class adePreparingBox_Insert
                 'name1' => $parameters['sender']['name'],
                 'name2' => '',
                 'name3' => '',
-                'country' => $parameters['sender']['country'],
+                'country' => strtr(strtolower($parameters['sender']['country']), $counties_map),
                 'zipcode' => $parameters['sender']['postcode'],
                 'city' => $parameters['sender']['city'],
                 'street' => $parameters['sender']['street'],
@@ -58,12 +60,20 @@ class adePreparingBox_Insert
 
         try {
 
+            if ($this->data['rcountry'] != 'pl') {
+                $params = array(
+                    'session' => $session,
+                    'lang' => $this->data['rcountry'],
+                );
+                $client->adeLang_Change($params);
+            }
+
             $params = array(
                 'session' => $session,
                 'consign_prep_data' => $this->data,
             );
-
             $result = $client->adePreparingBox_Insert($params);
+
             if (isset($result->return->id)) {
 
                 $this->response['return'] = $result->return->id;

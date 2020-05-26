@@ -32,7 +32,7 @@ class adePreparingBox_Insert
             'rzipcode' => $parameters['receiver']['postcode'],
             'rcity' => $parameters['receiver']['city'],
             'rstreet' => $parameters['receiver']['street'],
-            'rphone' => $parameters['receiver']['name'],
+            'rphone' => $parameters['receiver']['phone'],
             'rcontact' => '',
             'references' => $parameters['options']['references'],
             'notes' => $parameters['options']['note'],

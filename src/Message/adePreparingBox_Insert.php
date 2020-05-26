@@ -52,9 +52,9 @@ class adePreparingBox_Insert
             'srv_bool' => array(
                 'cod' => ($parameters['options']['cod'] == true) ? true : false,
                 'cod_amount' => ($parameters['options']['cod'] == true) ? $parameters['options']['amount'] : '',
-                's10' => false,
-                's12' => false,
-                'sat' => false,
+                's10' => (isset($parameters['options']['hour10'])) ? $parameters['options']['hour10'] : false,
+                's12' => (isset($parameters['options']['hour12'])) ? $parameters['options']['hour12'] : false,
+                'sat' => (isset($parameters['options']['saturday'])) ? $parameters['options']['saturday'] : false,
             ),
             'srv_ade' => '',
             'srv_daw' => '',

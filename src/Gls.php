@@ -10,9 +10,16 @@ use Sylapi\Courier\Gls\Message\adePickup_GetConsign;
 use Sylapi\Courier\Gls\Message\adePickup_Create;
 
 
+/**
+ * Class Gls
+ * @package Sylapi\Courier\Gls
+ */
 class Gls extends Connect
 {
 
+    /**
+     * @param $parameters
+     */
     public function initialize($parameters) {
 
         $this->parameters = $parameters;
@@ -27,6 +34,9 @@ class Gls extends Connect
         }
     }
 
+    /**
+     * @return bool
+     */
     public function login() {
 
         if (empty($this->client)) {
@@ -55,6 +65,9 @@ class Gls extends Connect
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function isSession() {
         if (!empty($this->session)) {
             return true;
@@ -62,6 +75,9 @@ class Gls extends Connect
         return false;
     }
 
+    /**
+     * Validate package data
+     */
     public function ValidateData() {
 
         $this->login();
@@ -86,6 +102,9 @@ class Gls extends Connect
         }
     }
 
+    /**
+     * Get once label data
+     */
     public function GetLabel() {
 
         $this->login();
@@ -102,6 +121,9 @@ class Gls extends Connect
         }
     }
 
+    /**
+     * Gel labels data
+     */
     public function GetLabels()
     {
         $this->login();
@@ -116,6 +138,9 @@ class Gls extends Connect
         }
     }
 
+    /**
+     * Create package
+     */
     public function CreatePackage() {
 
         $this->login();
@@ -174,6 +199,9 @@ class Gls extends Connect
         }
     }
 
+    /**
+     * Check cost package
+     */
     public function CheckPrice() {
 
         $response = (isset($this->parameters['options']['custom']['parcel_cost'])) ? $this->parameters['options']['custom']['parcel_cost'] : 0;
@@ -181,7 +209,9 @@ class Gls extends Connect
     }
 
 
-
+    /**
+     * @param $prepare_id
+     */
     private function preparing_delete($prepare_id) {
 
         $adePreparingBoxDeleteConsign = new adePreparingBox_DeleteConsign();

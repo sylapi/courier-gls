@@ -1,11 +1,25 @@
 <?php
 namespace Sylapi\Courier\Gls\Message;
 
+/**
+ * Class adePickup_GetParcelLabel
+ * @package Sylapi\Courier\Gls\Message
+ */
 class adePickup_GetParcelLabel
 {
+    /**
+     * @var
+     */
     private $data;
+    /**
+     * @var
+     */
     private $response;
 
+    /**
+     * @param $parameters
+     * @return $this
+     */
     public function prepareData($parameters) {
 
         $format = array(
@@ -30,6 +44,10 @@ class adePickup_GetParcelLabel
         return $this;
     }
 
+    /**
+     * @param $client
+     * @param $session
+     */
     public function call($client, $session) {
 
         try {
@@ -54,6 +72,9 @@ class adePickup_GetParcelLabel
         }
     }
 
+    /**
+     * @return bool|string|null
+     */
     public function getResponse() {
         if (!empty($this->response['return']->return->labels)) {
             return base64_decode($this->response['return']->return->labels);
@@ -61,6 +82,9 @@ class adePickup_GetParcelLabel
         return null;
     }
 
+    /**
+     * @return bool
+     */
     public function isSuccess() {
         if (!empty($this->response['return']->return->labels)) {
             return true;
@@ -68,10 +92,16 @@ class adePickup_GetParcelLabel
         return false;
     }
 
+    /**
+     * @return |null
+     */
     public function getError() {
         return (!empty($this->response['error'])) ? $this->response['error'] : null;
     }
 
+    /**
+     * @return int
+     */
     public function getCode() {
         return (!empty($this->response['code'])) ? $this->response['code'] : 0;
     }

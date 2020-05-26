@@ -1,11 +1,25 @@
 <?php
 namespace Sylapi\Courier\Gls\Message;
 
+/**
+ * Class adePickup_GetConsign
+ * @package Sylapi\Courier\Gls\Message
+ */
 class adePickup_GetConsign
 {
+    /**
+     * @var
+     */
     private $data;
+    /**
+     * @var
+     */
     private $response;
 
+    /**
+     * @param $consign_id
+     * @return $this
+     */
     public function prepareData($consign_id) {
 
         $this->data['consign_id'] = $consign_id;
@@ -13,6 +27,10 @@ class adePickup_GetConsign
         return $this;
     }
 
+    /**
+     * @param $client
+     * @param $session
+     */
     public function call($client, $session) {
 
         try {
@@ -37,6 +55,9 @@ class adePickup_GetConsign
         }
     }
 
+    /**
+     * @return |null
+     */
     public function getResponse() {
         if (!empty($this->response['return']->return->parcels->items->number) && $this->response['return']->return->parcels->items->number > 0) {
             return $this->response['return'];
@@ -44,6 +65,9 @@ class adePickup_GetConsign
         return null;
     }
 
+    /**
+     * @return bool
+     */
     public function isSuccess() {
         if (!empty($this->response['return']->return->parcels->items->number) && $this->response['return']->return->parcels->items->number > 0) {
             return true;
@@ -51,10 +75,16 @@ class adePickup_GetConsign
         return false;
     }
 
+    /**
+     * @return |null
+     */
     public function getError() {
         return (!empty($this->response['error'])) ? $this->response['error'] : null;
     }
 
+    /**
+     * @return int
+     */
     public function getCode() {
         return (!empty($this->response['code'])) ? $this->response['code'] : 0;
     }

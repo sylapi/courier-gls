@@ -81,7 +81,7 @@ class adePreparingBox_Insert
             if ($this->data['rcountry'] != 'pl') {
                 $params = array(
                     'session' => $session,
-                    'lang' => $this->data['rcountry'],
+                    'lang' => 'gb',
                 );
                 $client->adeLang_Change($params);
             }

@@ -55,6 +55,7 @@ class adePreparingBox_Insert
                 's10' => (isset($parameters['options']['hour10'])) ? $parameters['options']['hour10'] : false,
                 's12' => (isset($parameters['options']['hour12'])) ? $parameters['options']['hour12'] : false,
                 'sat' => (isset($parameters['options']['saturday'])) ? $parameters['options']['saturday'] : false,
+                'pr' => (isset($parameters['options']['pr'])) ? $parameters['options']['pr'] : false,
             ),
             'srv_ade' => '',
             'srv_daw' => '',

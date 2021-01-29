@@ -23,10 +23,18 @@ class adePreparingBox_Insert
     public function prepareData($parameters) {
 
         $counties_map = array('uk' => 'gb');
-        $srv_ppe = [];
+        $ppe = null;
+        $pr = (isset($parameters['options']['pr'])) ? $parameters['options']['pr'] : false;
 
-        if (isset($parameters['options']['pr'])) {
-            $srv_ppe = array (
+        if ($pr) {
+            $ppe = [
+                'sname1' => $parameters['sender']['name'],
+                'scountry' => strtr(strtolower($parameters['sender']['country']), $counties_map),
+                'szipcode' => $parameters['sender']['postcode'],
+                'scity' => $parameters['sender']['city'],
+                'sstreet' => $parameters['sender']['street'],
+                'sphone' => $parameters['sender']['phone'],
+
                 'rname1' => $parameters['receiver']['name'],
                 'rname2' => '',
                 'rname3' => '',
@@ -35,21 +43,12 @@ class adePreparingBox_Insert
                 'rcity' => $parameters['receiver']['city'],
                 'rstreet' => $parameters['receiver']['street'],
                 'rphone' => $parameters['receiver']['phone'],
-                'rcontact' => '',
 
-                'sname1' => $parameters['sender']['name'],
-                'sname2' => '',
-                'sname3' => '',
-                'scountry' => strtr(strtolower($parameters['sender']['country']), $counties_map),
-                'szipcode' => $parameters['sender']['postcode'],
-                'scity' => $parameters['sender']['city'],
-                'sstreet' => $parameters['sender']['street'],
-                'sphone' => $parameters['sender']['phone'],
-                'scontact' => '',
-
+                'references' => $parameters['options']['references'],
                 'weight' => $parameters['options']['weight'],
-            );
+            ];
         }
+
 
         $this->data = array(
             'rname1' => $parameters['receiver']['name'],
@@ -65,7 +64,7 @@ class adePreparingBox_Insert
             'notes' => $parameters['options']['note'],
             'quantity' => 1,
             'weight' => $parameters['options']['weight'],
-            'date' => date('Y-m-d', time()),
+            'date' => $pr == true ? date(date('Y-m-d', strtotime("+14 days")), time()) : date('Y-m-d'),
             'pfc' => 1,
             'sendaddr' => array(
                 'name1' => $parameters['sender']['name'],
@@ -82,19 +81,19 @@ class adePreparingBox_Insert
                 's10' => (isset($parameters['options']['hour10'])) ? $parameters['options']['hour10'] : false,
                 's12' => (isset($parameters['options']['hour12'])) ? $parameters['options']['hour12'] : false,
                 'sat' => (isset($parameters['options']['saturday'])) ? $parameters['options']['saturday'] : false,
-                'pr' => (isset($parameters['options']['pr'])) ? $parameters['options']['pr'] : false,
+                'pr' => $pr,
             ),
             'srv_ade' => '',
             'srv_daw' => '',
             'srv_ident' => '',
-            'srv_ppe' => $srv_ppe,
+            'srv_ppe' => $ppe,
             'srv_sds' => '',
             'parcels' => array([
                 'reference' => $parameters['options']['references'],
                 'weight' => $parameters['options']['weight'],
             ]),
         );
-
+        
         return $this;
     }
 
@@ -118,8 +117,9 @@ class adePreparingBox_Insert
                 'session' => $session,
                 'consign_prep_data' => $this->data,
             );
+            
             $result = $client->adePreparingBox_Insert($params);
-
+            
             if (isset($result->return->id)) {
 
                 $this->response['return'] = $result->return->id;

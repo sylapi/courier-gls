@@ -93,7 +93,9 @@ class Gls extends Connect
                 $this->setResponse($prepare_id);
 
                 // Delete prepare box
-                $this->preparing_delete($prepare_id);
+                if (isset($this->parameters['options']['pr']) && $this->parameters['options']['pr'] === false) {
+                    $this->preparing_delete($prepare_id);
+                }
             }
             else {
                 $this->setError($adePreparingBoxInsert->getError());

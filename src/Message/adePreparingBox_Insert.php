@@ -24,9 +24,9 @@ class adePreparingBox_Insert
 
         $counties_map = array('uk' => 'gb');
         $ppe = null;
-        $pr = (isset($parameters['options']['pr'])) ? $parameters['options']['pr'] : false;
+        $srs = (isset($parameters['options']['srs'])) ? $parameters['options']['srs'] : false;
 
-        if ($pr) {
+        if ($srs) {
             $ppe = [
                 'sname1' => $parameters['sender']['name'],
                 'scountry' => strtr(strtolower($parameters['sender']['country']), $counties_map),
@@ -64,7 +64,7 @@ class adePreparingBox_Insert
             'notes' => $parameters['options']['note'],
             'quantity' => 1,
             'weight' => $parameters['options']['weight'],
-            'date' => $pr == true ? date(date('Y-m-d', strtotime("+14 days")), time()) : date('Y-m-d'),
+            'date' => $srs == true ? date(date('Y-m-d', strtotime("+14 days")), time()) : date('Y-m-d'),
             'pfc' => 1,
             'sendaddr' => array(
                 'name1' => $parameters['sender']['name'],
@@ -81,7 +81,7 @@ class adePreparingBox_Insert
                 's10' => (isset($parameters['options']['hour10'])) ? $parameters['options']['hour10'] : false,
                 's12' => (isset($parameters['options']['hour12'])) ? $parameters['options']['hour12'] : false,
                 'sat' => (isset($parameters['options']['saturday'])) ? $parameters['options']['saturday'] : false,
-                'pr' => $pr,
+                'srs' => $srs,
             ),
             'srv_ade' => '',
             'srv_daw' => '',

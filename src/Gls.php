@@ -91,9 +91,8 @@ class Gls extends Connect
 
                 $prepare_id = $adePreparingBoxInsert->getResponse();
                 $this->setResponse($prepare_id);
-
-                // Delete prepare box
                 $this->preparing_delete($prepare_id);
+                
             }
             else {
                 $this->setError($adePreparingBoxInsert->getError());

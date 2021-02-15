@@ -1,9 +1,9 @@
 <?php
+
 namespace Sylapi\Courier\Gls\Message;
 
 /**
- * Class adePickup_GetConsignIDs
- * @package Sylapi\Courier\Gls\Message
+ * Class adePickup_GetConsignIDs.
  */
 class adePickup_GetConsignIDs
 {
@@ -18,10 +18,11 @@ class adePickup_GetConsignIDs
 
     /**
      * @param $confirm_id
+     *
      * @return $this
      */
-    public function prepareData($confirm_id) {
-
+    public function prepareData($confirm_id)
+    {
         $this->data['confirm_id'] = $confirm_id;
 
         return $this;
@@ -31,26 +32,23 @@ class adePickup_GetConsignIDs
      * @param $client
      * @param $session
      */
-    public function call($client, $session) {
-
+    public function call($client, $session)
+    {
         try {
-
-            $params = array(
-                'session' => $session,
-                'id' => $this->data['confirm_id'],
+            $params = [
+                'session'  => $session,
+                'id'       => $this->data['confirm_id'],
                 'id_start' => 0,
-            );
+            ];
 
             $result = $client->adePickup_GetConsignIDs($params);
             if (!empty($result->return->items)) {
                 $this->response['return'] = $result->return->items;
-            }
-            else {
+            } else {
                 $this->response['error'] = $result->faultcode.' | '.$result->faultstring;
                 $this->response['code'] = $result->faultactor.'';
             }
-        }
-        catch (\SoapFault $e) {
+        } catch (\SoapFault $e) {
             $this->response['error'] = $e->faultactor.' | '.$e->faultstring;
             $this->response['code'] = $e->faultcode.'';
         }
@@ -59,34 +57,40 @@ class adePickup_GetConsignIDs
     /**
      * @return |null
      */
-    public function getResponse() {
+    public function getResponse()
+    {
         if (!empty($this->response['return']) && $this->response['return'] > 0) {
             return $this->response['return'];
         }
+
         return null;
     }
 
     /**
      * @return bool
      */
-    public function isSuccess() {
+    public function isSuccess()
+    {
         if (!empty($this->response['return'])) {
             return true;
         }
+
         return false;
     }
 
     /**
      * @return |null
      */
-    public function getError() {
+    public function getError()
+    {
         return (!empty($this->response['error'])) ? $this->response['error'] : null;
     }
 
     /**
      * @return int
      */
-    public function getCode() {
+    public function getCode()
+    {
         return (!empty($this->response['code'])) ? $this->response['code'] : 0;
     }
 }

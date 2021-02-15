@@ -3,8 +3,7 @@
 namespace Sylapi\Courier\Gls\Message;
 
 /**
- * Class adePreparingBox_DeleteConsign
- * @package Sylapi\Courier\Gls\Message
+ * Class adePreparingBox_DeleteConsign.
  */
 class adePreparingBox_DeleteConsign
 {
@@ -19,11 +18,13 @@ class adePreparingBox_DeleteConsign
 
     /**
      * @param $prepare_id
+     *
      * @return $this
      */
     public function prepareData($prepare_id)
     {
         $this->data['prepare_id'] = $prepare_id;
+
         return $this;
     }
 
@@ -31,18 +32,16 @@ class adePreparingBox_DeleteConsign
      * @param $client
      * @param $session
      */
-    public function call($client, $session) {
-
+    public function call($client, $session)
+    {
         try {
-
-            $params = array(
+            $params = [
                 'session' => $session,
-                'id' => $this->data['prepare_id'],
-            );
+                'id'      => $this->data['prepare_id'],
+            ];
 
             $this->response = $client->adePreparingBox_DeleteConsign($params);
-        }
-        catch (\SoapFault $e) {
+        } catch (\SoapFault $e) {
             $this->response['error'] = $e->faultactor;
         }
     }
@@ -50,34 +49,40 @@ class adePreparingBox_DeleteConsign
     /**
      * @return |null
      */
-    public function getResponse() {
+    public function getResponse()
+    {
         if (!empty($this->response->return->id) && $this->response->return->id > 0) {
             return $this->response->return->id;
         }
+
         return null;
     }
 
     /**
      * @return bool
      */
-    public function isSuccess() {
+    public function isSuccess()
+    {
         if (!empty($this->response->return->id) && $this->response->return->id > 0) {
             return true;
         }
+
         return false;
     }
 
     /**
      * @return |null
      */
-    public function getError() {
+    public function getError()
+    {
         return (!empty($this->response['error'])) ? $this->response['error'] : null;
     }
 
     /**
      * @return int
      */
-    public function getCode() {
+    public function getCode()
+    {
         return (!empty($this->response['code'])) ? $this->response['code'] : 0;
     }
 }

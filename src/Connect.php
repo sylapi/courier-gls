@@ -3,12 +3,10 @@
 namespace Sylapi\Courier\Gls;
 
 /**
- * Class Connect
- * @package Sylapi\Courier\Gls
+ * Class Connect.
  */
 abstract class Connect
 {
-
     const API_LIVE = 'https://ade.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl';
 
     const API_SANDBOX = 'https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl';
@@ -53,59 +51,70 @@ abstract class Connect
     /**
      * Connect constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->api_uri = self::API_LIVE;
     }
 
     /**
      * @param $login
+     *
      * @return mixed
      */
-    protected function setLogin($login) {
+    protected function setLogin($login)
+    {
         return $this->login = $login;
     }
 
     /**
      * @param $password
+     *
      * @return mixed
      */
-    protected function setPassword($password) {
+    protected function setPassword($password)
+    {
         return $this->password = $password;
     }
 
     /**
      * @return string
      */
-    public function getApiUri() {
+    public function getApiUri()
+    {
         return $this->api_uri;
     }
 
     /**
      * @return string
      */
-    public function sandbox() {
+    public function sandbox()
+    {
         return $this->api_uri = self::API_SANDBOX;
     }
 
     /**
      * @return bool
      */
-    public function isSuccess() {
+    public function isSuccess()
+    {
         return (empty($this->error)) ? true : false;
     }
 
     /**
      * @return mixed
      */
-    public function getError() {
+    public function getError()
+    {
         return $this->error;
     }
 
     /**
      * @param $value
+     *
      * @return mixed
      */
-    protected function setError($value) {
+    protected function setError($value)
+    {
         if (!empty($value)) {
             return $this->error[] = $value;
         }
@@ -113,38 +122,45 @@ abstract class Connect
 
     /**
      * @param $value
+     *
      * @return mixed
      */
-    protected function setCode($value) {
+    protected function setCode($value)
+    {
         return $this->code = $value;
     }
 
     /**
      * @return string
      */
-    public function getCode() {
+    public function getCode()
+    {
         return $this->code;
     }
 
     /**
      * @param $value
+     *
      * @return mixed
      */
-    protected function setResponse($value) {
+    protected function setResponse($value)
+    {
         return $this->response = $value;
     }
 
     /**
      * @return mixed
      */
-    public function getResponse() {
+    public function getResponse()
+    {
         return $this->response;
     }
 
     /**
      * @param $soap
      */
-    public function setSoapClient($soap) {
+    public function setSoapClient($soap)
+    {
         $this->client = $soap;
         $this->session = '12345';
     }
@@ -152,19 +168,20 @@ abstract class Connect
     /**
      * @param $session
      */
-    public function setSession($session) {
+    public function setSession($session)
+    {
         $this->session = $session;
     }
 
     /**
      * @return array
      */
-    public function debug() {
-
+    public function debug()
+    {
         return [
-            'success' => $this->isSuccess(),
-            'code' => $this->getCode(),
-            'error' => $this->getError(),
+            'success'  => $this->isSuccess(),
+            'code'     => $this->getCode(),
+            'error'    => $this->getError(),
             'response' => $this->getResponse(),
         ];
     }

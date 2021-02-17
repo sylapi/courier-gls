@@ -2,18 +2,18 @@
 
 namespace Sylapi\Courier\Gls\Tests;
 
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
+use Sylapi\Courier\Gls\GlsCourierCreateShipment;
+use Sylapi\Courier\Gls\GlsParameters;
 use Sylapi\Courier\Gls\GlsParcel;
+use Sylapi\Courier\Gls\GlsReceiver;
 use Sylapi\Courier\Gls\GlsSender;
 use Sylapi\Courier\Gls\GlsSession;
-use Sylapi\Courier\Gls\GlsReceiver;
 use Sylapi\Courier\Gls\GlsShipment;
-use Sylapi\Courier\Gls\GlsParameters;
-use Sylapi\Courier\Gls\GlsCourierCreateShipment;
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 class GlsCourierCreateShipmentTest extends PHPUnitTestCase
-{    
+{
     private $soapMock = null;
     private $sessionMock = null;
 
@@ -22,14 +22,13 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
         $this->soapMock = $this->getSoapMock();
         $this->sessionMock = $this->getSessionMock($this->soapMock);
     }
-    
+
     private function getSoapMock()
     {
         return $this->getMockBuilder('SoapClient')
                     ->disableOriginalConstructor()
                     ->getMock();
     }
-
 
     private function getSessionMock($soapMock)
     {
@@ -40,7 +39,7 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
             ->willReturn('522a034bc583c200ebb67f51f9e242cb371d9fbcc0ab0a099e6358e078a690a2');
         $sessionMock->method('parameters')
             ->willReturn(GlsParameters::create([
-                'labelType' => 'one_label_on_a4_lt_pdf'
+                'labelType' => 'one_label_on_a4_lt_pdf',
             ]));
 
         return $sessionMock;
@@ -54,24 +53,24 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
         $shipmentMock = $this->createMock(GlsShipment::class);
 
         $shipmentMock->method('getSender')
-                ->willReturn($senderMock);      
+                ->willReturn($senderMock);
 
         $shipmentMock->method('getReceiver')
                 ->willReturn($receiverMock);
-        
+
         $shipmentMock->method('getParcel')
                 ->willReturn($parcelMock);
-        
+
         return $shipmentMock;
     }
 
     public function testCreateShipmentSuccess()
     {
-        $localXml =  simplexml_load_string(file_get_contents(__DIR__ . '/Mock/adePreparingBox_InsertSuccess.xml'));
+        $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/adePreparingBox_InsertSuccess.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
         $glsCourierCreateShipment = new GlsCourierCreateShipment($this->sessionMock);
-    
-        $response =  $glsCourierCreateShipment->createShipment($this->getShipmentMock());
+
+        $response = $glsCourierCreateShipment->createShipment($this->getShipmentMock());
 
         $this->assertIsArray($response);
         $this->assertArrayHasKey('shipmentId', $response);
@@ -86,17 +85,18 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
         $this->soapMock
                 ->expects($this->any())
                 ->method('__call')
-                ->will($this->throwException(
-                        new SoapFault(
+                ->will(
+                    $this->throwException(
+                    new SoapFault(
                             $errorCode,
                             $errorMessage
                         )
-                    )
+                )
                 );
 
         $glsCourierCreateShipment = new GlsCourierCreateShipment($this->sessionMock);
 
-        $response =  $glsCourierCreateShipment->createShipment($this->getShipmentMock());
+        $response = $glsCourierCreateShipment->createShipment($this->getShipmentMock());
 
         $this->assertIsArray($response);
         $this->assertArrayHasKey('error', $response);
@@ -104,6 +104,4 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
         $this->assertEquals($response['error'], $errorMessage);
         $this->assertEquals($response['code'], $errorCode);
     }
-
-    
 }

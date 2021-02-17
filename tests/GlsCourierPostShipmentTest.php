@@ -2,15 +2,15 @@
 
 namespace Sylapi\Courier\Gls\Tests;
 
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
 use Sylapi\Courier\Gls\GlsBooking;
-use Sylapi\Courier\Gls\GlsSession;
-use Sylapi\Courier\Gls\GlsParameters;
 use Sylapi\Courier\Gls\GlsCourierPostShipment;
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Sylapi\Courier\Gls\GlsParameters;
+use Sylapi\Courier\Gls\GlsSession;
 
 class GlsCourierPostShipmentTest extends PHPUnitTestCase
-{    
+{
     private $soapMock = null;
     private $sessionMock = null;
 
@@ -27,7 +27,6 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
                     ->getMock();
     }
 
-
     private function getSessionMock($soapMock)
     {
         $sessionMock = $this->createMock(GlsSession::class);
@@ -37,7 +36,7 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
             ->willReturn('522a034bc583c200ebb67f51f9e242cb371d9fbcc0ab0a099e6358e078a690a2');
         $sessionMock->method('parameters')
             ->willReturn(GlsParameters::create([
-                'labelType' => 'one_label_on_a4_lt_pdf'
+                'labelType' => 'one_label_on_a4_lt_pdf',
             ]));
 
         return $sessionMock;
@@ -45,16 +44,16 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
 
     public function testPostShipmentSuccess()
     {
-        $localXml =  simplexml_load_string(file_get_contents(__DIR__ . '/Mock/adePreparingBox_InsertSuccess.xml'));
+        $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/adePreparingBox_InsertSuccess.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
         $glsCourierGetLabels = new GlsCourierPostShipment($this->sessionMock);
 
-        $shippingId = (string) rand(1000000,9999999);
-        
+        $shippingId = (string) rand(1000000, 9999999);
+
         $bookingMock = $this->createMock(GlsBooking::class);
         $bookingMock->method('getShipmentId')->willReturn($shippingId);
 
-        $response =  $glsCourierGetLabels->postShipment($bookingMock);
+        $response = $glsCourierGetLabels->postShipment($bookingMock);
 
         $this->assertIsArray($response);
         $this->assertArrayHasKey('shipmentId', $response);
@@ -64,19 +63,20 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
 
     public function testPostShipmentFailure()
     {
-        $shippingId = (string) rand(1000000,9999999);
+        $shippingId = (string) rand(1000000, 9999999);
         $errorCode = 'err_pickup_make_problem';
         $errorMessage = 'Error';
 
         $this->soapMock
                 ->expects($this->any())
                 ->method('__call')
-                ->will($this->throwException(
-                        new SoapFault(
+                ->will(
+                    $this->throwException(
+                    new SoapFault(
                             $errorCode,
                             $errorMessage
                         )
-                    )
+                )
                 );
 
         $bookingMock = $this->createMock(GlsBooking::class);
@@ -91,6 +91,5 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
         $this->assertArrayHasKey('code', $response);
         $this->assertEquals($response['error'], $errorMessage);
         $this->assertEquals($response['code'], $errorCode);
-
     }
 }

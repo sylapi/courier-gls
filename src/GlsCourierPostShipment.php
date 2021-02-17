@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
@@ -8,38 +9,38 @@ use Sylapi\Courier\Contracts\CourierPostShipment;
 
 class GlsCourierPostShipment implements CourierPostShipment
 {
-	private $session;
-	
-	public function __construct(GlsSession $session)
-	{
-		$this->session = $session;
-	}
+    private $session;
 
-	public function postShipment(Booking $booking) : array
-	{
-		$client = $this->session->client();
-		$token = $this->session->token();
+    public function __construct(GlsSession $session)
+    {
+        $this->session = $session;
+    }
 
-		$params = [
-			'session' => $token,
-			'consigns_ids' => [ $booking->getShipmentId() ],
-            'desc' => '' 
-		];
+    public function postShipment(Booking $booking): array
+    {
+        $client = $this->session->client();
+        $token = $this->session->token();
 
-		$response = [];
-		
-		try {
-			$result = $client->adePickup_Create($params);
-			$response = [
-				'shipmentId' => $result->return->id
-			];
-		} catch (\SoapFault $fault) {
-			$response = [
-				'error' => $fault->faultstring,
-				'code' => $fault->faultcode
-			];
-		}
+        $params = [
+            'session'      => $token,
+            'consigns_ids' => [$booking->getShipmentId()],
+            'desc'         => '',
+        ];
 
-		return $response;
-	}
+        $response = [];
+
+        try {
+            $result = $client->adePickup_Create($params);
+            $response = [
+                'shipmentId' => $result->return->id,
+            ];
+        } catch (\SoapFault $fault) {
+            $response = [
+                'error' => $fault->faultstring,
+                'code'  => $fault->faultcode,
+            ];
+        }
+
+        return $response;
+    }
 }

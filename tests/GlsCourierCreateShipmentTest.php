@@ -66,11 +66,11 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
                 ->method('__call')
                 ->will(
                     $this->throwException(
-                    new SoapFault(
-                            $errorCode,
-                            $errorMessage
-                        )
-                )
+                        new SoapFault(
+                        $errorCode,
+                        $errorMessage
+                    )
+                    )
                 );
 
         $glsCourierCreateShipment = new GlsCourierCreateShipment($this->sessionMock);

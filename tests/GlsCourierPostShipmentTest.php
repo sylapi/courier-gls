@@ -51,11 +51,11 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
                 ->method('__call')
                 ->will(
                     $this->throwException(
-                    new SoapFault(
-                            $errorCode,
-                            $errorMessage
-                        )
-                )
+                        new SoapFault(
+                        $errorCode,
+                        $errorMessage
+                    )
+                    )
                 );
 
         $bookingMock = $this->createMock(GlsBooking::class);

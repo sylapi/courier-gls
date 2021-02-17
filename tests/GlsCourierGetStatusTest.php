@@ -31,6 +31,4 @@ class GlsCourierGetStatusTest extends PHPUnitTestCase
 
         $this->assertEquals(StatusType::APP_UNAVAILABLE, $response);
     }
-
-
 }

@@ -6,11 +6,12 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
 use Sylapi\Courier\Gls\GlsBooking;
 use Sylapi\Courier\Gls\GlsCourierPostShipment;
-use Sylapi\Courier\Gls\GlsParameters;
-use Sylapi\Courier\Gls\GlsSession;
+use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
 
 class GlsCourierPostShipmentTest extends PHPUnitTestCase
 {
+    use GlsSessionTrait;
+
     private $soapMock = null;
     private $sessionMock = null;
 
@@ -20,40 +21,18 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
         $this->sessionMock = $this->getSessionMock($this->soapMock);
     }
 
-    private function getSoapMock()
-    {
-        return $this->getMockBuilder('SoapClient')
-                    ->disableOriginalConstructor()
-                    ->getMock();
-    }
-
-    private function getSessionMock($soapMock)
-    {
-        $sessionMock = $this->createMock(GlsSession::class);
-        $sessionMock->method('client')
-            ->willReturn($soapMock);
-        $sessionMock->method('token')
-            ->willReturn('522a034bc583c200ebb67f51f9e242cb371d9fbcc0ab0a099e6358e078a690a2');
-        $sessionMock->method('parameters')
-            ->willReturn(GlsParameters::create([
-                'labelType' => 'one_label_on_a4_lt_pdf',
-            ]));
-
-        return $sessionMock;
-    }
-
     public function testPostShipmentSuccess()
     {
         $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/adePreparingBox_InsertSuccess.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
-        $glsCourierGetLabels = new GlsCourierPostShipment($this->sessionMock);
+        $glsCourierPostShipment = new GlsCourierPostShipment($this->sessionMock);
 
         $shippingId = (string) rand(1000000, 9999999);
 
         $bookingMock = $this->createMock(GlsBooking::class);
         $bookingMock->method('getShipmentId')->willReturn($shippingId);
 
-        $response = $glsCourierGetLabels->postShipment($bookingMock);
+        $response = $glsCourierPostShipment->postShipment($bookingMock);
 
         $this->assertIsArray($response);
         $this->assertArrayHasKey('shipmentId', $response);

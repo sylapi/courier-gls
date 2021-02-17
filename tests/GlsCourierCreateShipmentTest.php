@@ -5,15 +5,16 @@ namespace Sylapi\Courier\Gls\Tests;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
 use Sylapi\Courier\Gls\GlsCourierCreateShipment;
-use Sylapi\Courier\Gls\GlsParameters;
 use Sylapi\Courier\Gls\GlsParcel;
 use Sylapi\Courier\Gls\GlsReceiver;
 use Sylapi\Courier\Gls\GlsSender;
-use Sylapi\Courier\Gls\GlsSession;
 use Sylapi\Courier\Gls\GlsShipment;
+use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
 
 class GlsCourierCreateShipmentTest extends PHPUnitTestCase
 {
+    use GlsSessionTrait;
+
     private $soapMock = null;
     private $sessionMock = null;
 
@@ -21,28 +22,6 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
     {
         $this->soapMock = $this->getSoapMock();
         $this->sessionMock = $this->getSessionMock($this->soapMock);
-    }
-
-    private function getSoapMock()
-    {
-        return $this->getMockBuilder('SoapClient')
-                    ->disableOriginalConstructor()
-                    ->getMock();
-    }
-
-    private function getSessionMock($soapMock)
-    {
-        $sessionMock = $this->createMock(GlsSession::class);
-        $sessionMock->method('client')
-            ->willReturn($soapMock);
-        $sessionMock->method('token')
-            ->willReturn('522a034bc583c200ebb67f51f9e242cb371d9fbcc0ab0a099e6358e078a690a2');
-        $sessionMock->method('parameters')
-            ->willReturn(GlsParameters::create([
-                'labelType' => 'one_label_on_a4_lt_pdf',
-            ]));
-
-        return $sessionMock;
     }
 
     private function getShipmentMock()

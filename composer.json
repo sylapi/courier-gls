@@ -31,7 +31,7 @@
         "psr-4": { "Sylapi\\Courier\\Gls\\" : "src/" }
     },
     "autoload-dev": {
-        "psr-4": { "Sylapi\\Courier\\Olza\\Tests\\": "tests/" }
+        "psr-4": { "Sylapi\\Courier\\Gls\\Tests\\": "tests/" }
     },     
     "prefer-stable": false
 }

@@ -7,7 +7,6 @@ namespace Sylapi\Courier\Gls;
 use SoapClient;
 use SoapFault;
 use Sylapi\Courier\Exceptions\InvalidArgumentException;
-use Sylapi\Courier\Exceptions\ResponseException;
 
 class GlsSession
 {
@@ -18,7 +17,6 @@ class GlsSession
     {
         $this->parameters = $parameters;
         $this->initParameters();
-        $this->client = null;
         $this->token = null;
     }
 
@@ -73,20 +71,5 @@ class GlsSession
         }
 
         $this->token = $result->return->session;
-    }
-
-    public function logout(): bool
-    {
-        if (!$this->token) {
-            return false;
-        }
-
-        try {
-            $this->client->adeLogout(['session' => $this->token]);
-        } catch (SoapFault $e) {
-            throw new ResponseException('GlsSession - Invalid credentials: '.$e->getMessage().' Code: '.$e->faultcode);
-        }
-
-        return true;
     }
 }

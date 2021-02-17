@@ -40,11 +40,11 @@ class GlsCourierGetLabelsTest extends PHPUnitTestCase
                 ->method('__call')
                 ->will(
                     $this->throwException(
-                    new SoapFault(
-                            'err_parcel_number_is_invalid',
-                            "num: $shippingId mode:one_label_on_a4_lt_pdf"
-                        )
-                )
+                        new SoapFault(
+                        'err_parcel_number_is_invalid',
+                        "num: $shippingId mode:one_label_on_a4_lt_pdf"
+                    )
+                    )
                 );
 
         $glsCourierGetLabels = new GlsCourierGetLabels($this->sessionMock);

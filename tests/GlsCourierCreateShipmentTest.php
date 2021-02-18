@@ -4,13 +4,13 @@ namespace Sylapi\Courier\Gls\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
+use Sylapi\Courier\Contracts\Response;
 use Sylapi\Courier\Gls\GlsCourierCreateShipment;
 use Sylapi\Courier\Gls\GlsParcel;
 use Sylapi\Courier\Gls\GlsReceiver;
 use Sylapi\Courier\Gls\GlsSender;
 use Sylapi\Courier\Gls\GlsShipment;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
-use Sylapi\Courier\Contracts\Response;
 
 class GlsCourierCreateShipmentTest extends PHPUnitTestCase
 {
@@ -68,9 +68,9 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
                 ->will(
                     $this->throwException(
                         new SoapFault(
-                        $errorCode,
-                        $errorMessage
-                    )
+                            $errorCode,
+                            $errorMessage
+                        )
                     )
                 );
 

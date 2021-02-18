@@ -10,6 +10,7 @@ use Sylapi\Courier\Gls\GlsReceiver;
 use Sylapi\Courier\Gls\GlsSender;
 use Sylapi\Courier\Gls\GlsShipment;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
+use Sylapi\Courier\Contracts\Response;
 
 class GlsCourierCreateShipmentTest extends PHPUnitTestCase
 {
@@ -51,9 +52,9 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
 
         $response = $glsCourierCreateShipment->createShipment($this->getShipmentMock());
 
-        $this->assertIsArray($response);
-        $this->assertArrayHasKey('shipmentId', $response);
-        $this->assertNotEmpty($response['shipmentId']);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertObjectHasAttribute('shipmentId', $response);
+        $this->assertNotEmpty($response->shipmentId);
     }
 
     public function testCreateShipmentFailure()
@@ -77,10 +78,7 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
 
         $response = $glsCourierCreateShipment->createShipment($this->getShipmentMock());
 
-        $this->assertIsArray($response);
-        $this->assertArrayHasKey('error', $response);
-        $this->assertArrayHasKey('code', $response);
-        $this->assertEquals($response['error'], $errorMessage);
-        $this->assertEquals($response['code'], $errorCode);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertTrue($response->hasErrors());
     }
 }

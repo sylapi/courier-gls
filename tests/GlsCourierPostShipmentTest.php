@@ -7,7 +7,7 @@ use SoapFault;
 use Sylapi\Courier\Gls\GlsBooking;
 use Sylapi\Courier\Gls\GlsCourierPostShipment;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
-
+use Sylapi\Courier\Contracts\Response;
 class GlsCourierPostShipmentTest extends PHPUnitTestCase
 {
     use GlsSessionTrait;
@@ -34,10 +34,10 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
 
         $response = $glsCourierPostShipment->postShipment($bookingMock);
 
-        $this->assertIsArray($response);
-        $this->assertArrayHasKey('shipmentId', $response);
-        $this->assertNotEmpty($response['shipmentId']);
-        $this->assertNotEquals($response['shipmentId'], $shippingId);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertObjectHasAttribute('shipmentId', $response);
+        $this->assertNotEmpty($response->shipmentId);
+        $this->assertNotEquals($response->shipmentId, $shippingId);
     }
 
     public function testPostShipmentFailure()
@@ -65,10 +65,7 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
 
         $response = $glsCourierPostShipment->postShipment($bookingMock);
 
-        $this->assertIsArray($response);
-        $this->assertArrayHasKey('error', $response);
-        $this->assertArrayHasKey('code', $response);
-        $this->assertEquals($response['error'], $errorMessage);
-        $this->assertEquals($response['code'], $errorCode);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertTrue($response->hasErrors());
     }
 }

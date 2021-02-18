@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
 use Sylapi\Courier\Gls\GlsCourierGetLabels;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
+use Sylapi\Courier\Contracts\Response;
 
 class GlsCourierGetLabelsTest extends PHPUnitTestCase
 {
@@ -48,6 +49,8 @@ class GlsCourierGetLabelsTest extends PHPUnitTestCase
                 );
 
         $glsCourierGetLabels = new GlsCourierGetLabels($this->sessionMock);
-        $this->assertNull($glsCourierGetLabels->getLabel($shippingId));
+        $response = $glsCourierGetLabels->getLabel($shippingId);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertTrue($response->hasErrors());
     }
 }

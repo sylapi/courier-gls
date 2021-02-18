@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
+use Sylapi\Courier\Entities\Label;
 use Sylapi\Courier\Contracts\CourierGetLabels;
+use Sylapi\Courier\Exceptions\TransportException;
+use Sylapi\Courier\Contracts\Label as LabelContract;
 
 class GlsCourierGetLabels implements CourierGetLabels
 {
@@ -15,15 +18,11 @@ class GlsCourierGetLabels implements CourierGetLabels
         $this->session = $session;
     }
 
-    public function getLabel(string $shipmentId): ?string
+    public function getLabel(string $shipmentId): LabelContract
     {
-        // var_dump('Gls::GetLabel');
-
         $client = $this->session->client();
         $parameters = $this->session->parameters();
         $token = $this->session->token();
-
-        $response = null;
 
         try {
             $params = [
@@ -33,15 +32,13 @@ class GlsCourierGetLabels implements CourierGetLabels
             ];
 
             $result = $client->adePickup_GetLabels($params);
-            $response = (string) $result->return->labels;
+            return new Label((string) $result->return->labels);
         } catch (\SoapFault $fault) {
-            // $response = [
-            // 	'error' => $fault->faultstring,
-            // 	'code' => $fault->faultcode
-            // ];
-            $response = null;
+            $label = new Label(null);
+            $label->addError(
+                new TransportException($fault->faultstring .' Code: '. $fault->faultcode)
+            );
+            return $label;
         }
-
-        return $response;
     }
 }

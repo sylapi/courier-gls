@@ -12,12 +12,14 @@ class GlsSession
 {
     private $parameters;
     private $token;
+    private $client;
 
     public function __construct(GlsParameters $parameters)
     {
         $this->parameters = $parameters;
         $this->initParameters();
         $this->token = null;
+        $this->client = null;
     }
 
     public function parameters(): GlsParameters
@@ -61,6 +63,7 @@ class GlsSession
         $result = null;
 
         try {
+            /* @phpstan-ignore-next-line */
             $result = $this->client->adeLogin($params);
         } catch (SoapFault $fault) {
             throw new InvalidArgumentException('GlsSession - Invalid credentials: '.$fault->getMessage().' Code: '.$fault->faultcode);

@@ -4,10 +4,11 @@ namespace Sylapi\Courier\Gls\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
+use Sylapi\Courier\Contracts\Response;
 use Sylapi\Courier\Gls\GlsBooking;
 use Sylapi\Courier\Gls\GlsCourierPostShipment;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
-use Sylapi\Courier\Contracts\Response;
+
 class GlsCourierPostShipmentTest extends PHPUnitTestCase
 {
     use GlsSessionTrait;
@@ -52,9 +53,9 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
                 ->will(
                     $this->throwException(
                         new SoapFault(
-                        $errorCode,
-                        $errorMessage
-                    )
+                            $errorCode,
+                            $errorMessage
+                        )
                     )
                 );
 

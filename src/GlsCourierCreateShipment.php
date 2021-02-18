@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Sylapi\Courier\Gls;
 
 use Sylapi\Courier\Contracts\CourierCreateShipment;
-use Sylapi\Courier\Contracts\Shipment;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
+use Sylapi\Courier\Contracts\Shipment;
 use Sylapi\Courier\Entities\Response;
 use Sylapi\Courier\Exceptions\TransportException;
 
@@ -37,7 +37,7 @@ class GlsCourierCreateShipment implements CourierCreateShipment
             $response->shipmentId = $result->return->id;
         } catch (\SoapFault $fault) {
             $response->addError(
-                new TransportException($fault->faultstring .' Code: '. $fault->faultcode)
+                new TransportException($fault->faultstring.' Code: '.$fault->faultcode)
             );
         }
 

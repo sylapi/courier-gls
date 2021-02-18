@@ -35,11 +35,13 @@ class GlsCourierPostShipment implements CourierPostShipment
         try {
             $result = $client->adePickup_Create($params);
             $response->shipmentId = $result->return->id;
+
             return $response;
         } catch (\SoapFault $fault) {
             $response->addError(
-                new TransportException($fault->faultstring .' Code: '. $fault->faultcode)
+                new TransportException($fault->faultstring.' Code: '.$fault->faultcode)
             );
+
             return $response;
         }
     }

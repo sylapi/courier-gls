@@ -4,9 +4,9 @@ namespace Sylapi\Courier\Gls\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
+use Sylapi\Courier\Contracts\Response;
 use Sylapi\Courier\Gls\GlsCourierGetLabels;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
-use Sylapi\Courier\Contracts\Response;
 
 class GlsCourierGetLabelsTest extends PHPUnitTestCase
 {
@@ -42,9 +42,9 @@ class GlsCourierGetLabelsTest extends PHPUnitTestCase
                 ->will(
                     $this->throwException(
                         new SoapFault(
-                        'err_parcel_number_is_invalid',
-                        "num: $shippingId mode:one_label_on_a4_lt_pdf"
-                    )
+                            'err_parcel_number_is_invalid',
+                            "num: $shippingId mode:one_label_on_a4_lt_pdf"
+                        )
                     )
                 );
 

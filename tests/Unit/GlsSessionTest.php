@@ -1,6 +1,6 @@
 <?php
 
-namespace Sylapi\Courier\Gls\Tests;
+namespace Sylapi\Courier\Gls\Tests\Unit;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Sylapi\Courier\Gls\GlsParameters;

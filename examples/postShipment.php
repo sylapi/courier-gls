@@ -2,11 +2,11 @@
 
 use Sylapi\Courier\CourierFactory;
 
-$courier = CourierFactory::create('Gls',[
-    'login' => 'mylogin',
-    'password' => 'mypassword',
-    'sandbox' => true,
-    'labelType' => 'one_label_on_a4_rt_pdf'
+$courier = CourierFactory::create('Gls', [
+    'login'     => 'mylogin',
+    'password'  => 'mypassword',
+    'sandbox'   => true,
+    'labelType' => 'one_label_on_a4_rt_pdf',
 ]);
 
 /**

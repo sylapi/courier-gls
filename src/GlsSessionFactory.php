@@ -10,7 +10,7 @@ class GlsSessionFactory
     private $parameters;
 
     //These constants can be extracted into injected configuration
-    const API_LIVE = 'https://live.gls.test';
+    const API_LIVE = 'https://ade.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl';
     const API_SANDBOX = 'https://ade-test.gls-poland.com/adeplus/pm1/ade_webapi2.php?wsdl';
 
     public function session(GlsParameters $parameters): GlsSession

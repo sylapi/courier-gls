@@ -8,4 +8,9 @@ use Sylapi\Courier\Abstracts\Booking;
 
 class GlsBooking extends Booking
 {
+    public function validate(): bool
+    {
+        return true;
+    }
+
 }

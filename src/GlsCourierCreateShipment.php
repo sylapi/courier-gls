@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
-use Sylapi\Courier\Entities\Response;
-use Sylapi\Courier\Contracts\Shipment;
-use Sylapi\Courier\Helpers\ResponseHelper;
-use Sylapi\Courier\Exceptions\TransportException;
 use Sylapi\Courier\Contracts\CourierCreateShipment;
-use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
+use Sylapi\Courier\Contracts\Shipment;
+use Sylapi\Courier\Entities\Response;
+use Sylapi\Courier\Exceptions\TransportException;
+use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
+use Sylapi\Courier\Helpers\ResponseHelper;
 
 class GlsCourierCreateShipment implements CourierCreateShipment
 {
@@ -28,6 +28,7 @@ class GlsCourierCreateShipment implements CourierCreateShipment
         if (!$shipment->validate()) {
             $errors = GlsValidateErrorsHelper::toArrayExceptions($shipment->getErrors());
             ResponseHelper::pushErrorsToResponse($response, $errors);
+
             return $response;
         }
 
@@ -44,7 +45,7 @@ class GlsCourierCreateShipment implements CourierCreateShipment
             $result = $client->adePreparingBox_Insert($params);
             $response->shipmentId = $result->return->id;
         } catch (\SoapFault $fault) {
-            $excaption =  new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
+            $excaption = new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
             ResponseHelper::pushErrorsToResponse($response, [$excaption]);
         }
 

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Sylapi\Courier\Gls;
 
 use Sylapi\Courier\Contracts\Booking;
-use Sylapi\Courier\Entities\Response;
-use Sylapi\Courier\Helpers\ResponseHelper;
 use Sylapi\Courier\Contracts\CourierPostShipment;
+use Sylapi\Courier\Contracts\Response as ResponseContract;
+use Sylapi\Courier\Entities\Response;
 use Sylapi\Courier\Exceptions\TransportException;
 use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
-use Sylapi\Courier\Contracts\Response as ResponseContract;
+use Sylapi\Courier\Helpers\ResponseHelper;
 
 class GlsCourierPostShipment implements CourierPostShipment
 {
@@ -49,6 +49,7 @@ class GlsCourierPostShipment implements CourierPostShipment
         } catch (\SoapFault $fault) {
             $error = new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
             ResponseHelper::pushErrorsToResponse($response, [$error]);
+
             return $response;
         }
     }

@@ -41,6 +41,9 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
         $shipmentMock->method('getParcel')
                 ->willReturn($parcelMock);
 
+        $shipmentMock->method('validate')
+                ->willReturn(true);
+
         return $shipmentMock;
     }
 

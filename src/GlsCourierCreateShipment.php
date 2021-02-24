@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
-use Sylapi\Courier\Contracts\CourierCreateShipment;
-use Sylapi\Courier\Contracts\Response as ResponseContract;
-use Sylapi\Courier\Contracts\Shipment;
 use Sylapi\Courier\Entities\Response;
+use Sylapi\Courier\Contracts\Shipment;
+use Sylapi\Courier\Helpers\ResponseHelper;
 use Sylapi\Courier\Exceptions\TransportException;
+use Sylapi\Courier\Contracts\CourierCreateShipment;
+use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
+use Sylapi\Courier\Contracts\Response as ResponseContract;
 
 class GlsCourierCreateShipment implements CourierCreateShipment
 {
@@ -21,6 +23,14 @@ class GlsCourierCreateShipment implements CourierCreateShipment
 
     public function createShipment(Shipment $shipment): ResponseContract
     {
+        $response = new Response();
+
+        if (!$shipment->validate()) {
+            $errors = GlsValidateErrorsHelper::toArrayExceptions($shipment->getErrors());
+            ResponseHelper::pushErrorsToResponse($response, $errors);
+            return $response;
+        }
+
         $client = $this->session->client();
         $token = $this->session->token();
         $consign = $this->getConsign($shipment);
@@ -30,15 +40,12 @@ class GlsCourierCreateShipment implements CourierCreateShipment
             'consign_prep_data' => $consign,
         ];
 
-        $response = new Response();
-
         try {
             $result = $client->adePreparingBox_Insert($params);
             $response->shipmentId = $result->return->id;
         } catch (\SoapFault $fault) {
-            $response->addError(
-                new TransportException($fault->faultstring.' Code: '.$fault->faultcode)
-            );
+            $excaption =  new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
+            ResponseHelper::pushErrorsToResponse($response, [$excaption]);
         }
 
         return $response;

@@ -22,23 +22,30 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
         $this->sessionMock = $this->getSessionMock($this->soapMock);
     }
 
+    public function getBookingMock($shipmentId)
+    {
+        $bookingMock = $this->createMock(GlsBooking::class);
+        $bookingMock->method('getShipmentId')->willReturn($shipmentId);
+        $bookingMock->method('validate')->willReturn(true);
+
+        return $bookingMock;
+    }
+
     public function testPostShipmentSuccess()
     {
         $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/adePreparingBox_InsertSuccess.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
         $glsCourierPostShipment = new GlsCourierPostShipment($this->sessionMock);
 
-        $shippingId = (string) rand(1000000, 9999999);
-
-        $bookingMock = $this->createMock(GlsBooking::class);
-        $bookingMock->method('getShipmentId')->willReturn($shippingId);
+        $shipmentId = (string) rand(1000000, 9999999);
+        $bookingMock = $this->getBookingMock($shipmentId);
 
         $response = $glsCourierPostShipment->postShipment($bookingMock);
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertObjectHasAttribute('shipmentId', $response);
         $this->assertNotEmpty($response->shipmentId);
-        $this->assertNotEquals($response->shipmentId, $shippingId);
+        $this->assertNotEquals($response->shipmentId, $shipmentId);
     }
 
     public function testPostShipmentFailure()
@@ -59,8 +66,8 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
                     )
                 );
 
-        $bookingMock = $this->createMock(GlsBooking::class);
-        $bookingMock->method('getShipmentId')->willReturn($shippingId);
+        $shipmentId = (string) rand(1000000, 9999999);
+        $bookingMock = $this->getBookingMock($shipmentId);
 
         $glsCourierPostShipment = new GlsCourierPostShipment($this->sessionMock);
 

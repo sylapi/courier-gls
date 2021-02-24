@@ -12,5 +12,4 @@ class GlsBooking extends Booking
     {
         return true;
     }
-
 }

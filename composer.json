@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": ">=7.4.0",
-        "sylapi/courier": "dev-new"
+        "sylapi/courier": "dev-new",
+        "rakit/validation": "^1.4"
     },
     "repositories": [
         {

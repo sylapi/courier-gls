@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
+use Rakit\Validation\Validator;
 use Sylapi\Courier\Abstracts\Shipment;
 
 class GlsShipment extends Shipment
@@ -15,6 +16,27 @@ class GlsShipment extends Shipment
 
     public function validate(): bool
     {
+        $rules = [
+            'quantity' => 'required|min:1|max:1',
+            'parcel' => 'required',
+            'sender' => 'required',
+            'receiver' => 'required'
+        ];
+
+        $data = [
+            'quantity' => $this->getQuantity(),
+            'parcel' => $this->getParcel(),
+            'sender' => $this->getSender(),
+            'receiver' => $this->getReceiver()
+        ];
+
+        $validator = new Validator;
+
+        $validation = $validator->validate($data, $rules);
+        if ($validation->fails()) {
+            $this->setErrors($validation->errors()->toArray());
+            return false;
+        }
         return true;
     }
 }

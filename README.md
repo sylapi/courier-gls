@@ -13,6 +13,14 @@
         'password' => 'mypassword',
         'sandbox' => true,
         'labelType' => 'one_label_on_a4_rt_pdf'
+        'services' => [
+            'srs' => true, // true/false
+            // 's10' => true, // true/false
+            's12' => true, // true/false
+            'sat' => true, // true/false
+            'cod' => true, // cod
+            'cod_amount' => 100.00
+        ]
     ]);
 ```
 
@@ -53,9 +61,9 @@
 
     $shipment = $courier->makeShipment();
     $shipment->setSender($sender)
-        ->setReceiver($receiver);
-        ->setParcel($parcel);
-        ->setContent('Zawartość przesyłki')
+        ->setReceiver($receiver)
+        ->setParcel($parcel)
+        ->setContent('Zawartość przesyłki');
 
 
     try {
@@ -85,9 +93,7 @@
         if ($response->hasErrors()) {
             var_dump($response->getFirstError()->getMessage());
         } else {
-            var_dump($response->referenceId); // Utworzony wewnetrzny idetyfikator zamowienia
             var_dump($response->shipmentId); // Zewnetrzny idetyfikator zamowienia
-            var_dump($response->trackingId); // Zewnetrzny idetyfikator sledzenia przesylki
         }
     } catch (\Exception $e) {
         var_dump($e->getMessage());

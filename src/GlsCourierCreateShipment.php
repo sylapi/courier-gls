@@ -54,6 +54,8 @@ class GlsCourierCreateShipment implements CourierCreateShipment
 
     private function getConsign(Shipment $shipment): array
     {
+        $parameters = $this->session->parameters();
+
         $consign = [
             'rname1'     => $shipment->getReceiver()->getFirstName(),
             'rname2'     => $shipment->getReceiver()->getSurname(),
@@ -63,6 +65,7 @@ class GlsCourierCreateShipment implements CourierCreateShipment
             'rstreet'    => $shipment->getReceiver()->getStreet(),
             'rphone'     => $shipment->getReceiver()->getPhone(),
             'rcontact'   => $shipment->getReceiver()->getEmail(),
+            'date'       => $parameters->postDate ?? date('Y-m-d'),
             'references' => $shipment->getContent(),
             'sendaddr'   => [
                 'name1'   => $shipment->getSender()->getFullName(),
@@ -80,6 +83,39 @@ class GlsCourierCreateShipment implements CourierCreateShipment
                 ],
             ],
         ];
+
+        if(isset($parameters->services) && is_array($parameters->services))
+        {
+            $consign['srv_bool'] = $parameters->services;
+        }
+
+
+        if(isset($parameters->services) 
+            && is_array($parameters->services)
+            && isset($parameters->services['srs'])
+        )
+        {
+            $consign['srv_ppe'] = [
+                'sname1' => $shipment->getSender()->getFullName(),
+                'scountry' => $shipment->getSender()->getCountryCode(),
+                'szipcode' => $shipment->getSender()->getZipCode(),
+                'scity' => $shipment->getSender()->getCity(),
+                'sstreet' => $shipment->getSender()->getStreet(),
+                'sphone' => $shipment->getSender()->getPhone(),
+
+                'rname1' => $shipment->getReceiver()->getFullName(),
+                'rname2' => '',
+                'rname3' => '',
+                'rcountry' => $shipment->getReceiver()->getCountry(),
+                'rzipcode' => $shipment->getReceiver()->getZipCode(),
+                'rcity' => $shipment->getReceiver()->getCity(),
+                'rstreet' => $shipment->getReceiver()->getCity(),
+                'rphone' => $shipment->getReceiver()->getPhone(),
+
+                'references' => $shipment->getContent(),
+                'weight' => $shipment->getParcel()->getWeight(),
+            ];
+        }
 
         return $consign;
     }

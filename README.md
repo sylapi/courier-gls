@@ -12,7 +12,8 @@
         'login' => 'mylogin',
         'password' => 'mypassword',
         'sandbox' => true,
-        'labelType' => 'one_label_on_a4_rt_pdf'
+        'labelType' => 'one_label_on_a4_rt_pdf',
+        'postDate' => date('Y-m-d'),
         'services' => [
             'srs' => true, // true/false
             // 's10' => true, // true/false

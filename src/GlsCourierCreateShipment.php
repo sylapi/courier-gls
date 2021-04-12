@@ -84,36 +84,33 @@ class GlsCourierCreateShipment implements CourierCreateShipment
             ],
         ];
 
-        if(isset($parameters->services) && is_array($parameters->services))
-        {
+        if (isset($parameters->services) && is_array($parameters->services)) {
             $consign['srv_bool'] = $parameters->services;
         }
 
-
-        if(isset($parameters->services) 
+        if (isset($parameters->services)
             && is_array($parameters->services)
             && isset($parameters->services['srs'])
-        )
-        {
+        ) {
             $consign['srv_ppe'] = [
-                'sname1' => $shipment->getSender()->getFullName(),
+                'sname1'   => $shipment->getSender()->getFullName(),
                 'scountry' => $shipment->getSender()->getCountryCode(),
                 'szipcode' => $shipment->getSender()->getZipCode(),
-                'scity' => $shipment->getSender()->getCity(),
-                'sstreet' => $shipment->getSender()->getStreet(),
-                'sphone' => $shipment->getSender()->getPhone(),
+                'scity'    => $shipment->getSender()->getCity(),
+                'sstreet'  => $shipment->getSender()->getStreet(),
+                'sphone'   => $shipment->getSender()->getPhone(),
 
-                'rname1' => $shipment->getReceiver()->getFullName(),
-                'rname2' => '',
-                'rname3' => '',
+                'rname1'   => $shipment->getReceiver()->getFullName(),
+                'rname2'   => '',
+                'rname3'   => '',
                 'rcountry' => $shipment->getReceiver()->getCountry(),
                 'rzipcode' => $shipment->getReceiver()->getZipCode(),
-                'rcity' => $shipment->getReceiver()->getCity(),
-                'rstreet' => $shipment->getReceiver()->getCity(),
-                'rphone' => $shipment->getReceiver()->getPhone(),
+                'rcity'    => $shipment->getReceiver()->getCity(),
+                'rstreet'  => $shipment->getReceiver()->getCity(),
+                'rphone'   => $shipment->getReceiver()->getPhone(),
 
                 'references' => $shipment->getContent(),
-                'weight' => $shipment->getParcel()->getWeight(),
+                'weight'     => $shipment->getParcel()->getWeight(),
             ];
         }
 

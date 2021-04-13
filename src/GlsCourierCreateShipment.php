@@ -7,7 +7,6 @@ namespace Sylapi\Courier\Gls;
 use Sylapi\Courier\Contracts\CourierCreateShipment;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
 use Sylapi\Courier\Contracts\Shipment;
-use Sylapi\Courier\Gls\GlsShipment;
 use Sylapi\Courier\Entities\Response;
 use Sylapi\Courier\Exceptions\TransportException;
 use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;

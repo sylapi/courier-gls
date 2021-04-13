@@ -6,9 +6,24 @@ namespace Sylapi\Courier\Gls;
 
 use Rakit\Validation\Validator;
 use Sylapi\Courier\Abstracts\Shipment;
+use Sylapi\Courier\Contracts\Shipment as ShipmentContract;
 
 class GlsShipment extends Shipment
 {
+    private  $notes;
+
+    public function getNotes(): string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(string $notes): ShipmentContract
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
     public function getQuantity(): int
     {
         return 1;

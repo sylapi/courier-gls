@@ -64,7 +64,8 @@
     $shipment->setSender($sender)
         ->setReceiver($receiver)
         ->setParcel($parcel)
-        ->setContent('Zawartość przesyłki');
+        ->setContent('Zawartość przesyłki')
+        ->setNotes('Informacja dla kuriera');
 
 
     try {

@@ -10,7 +10,7 @@ use Sylapi\Courier\Contracts\Shipment as ShipmentContract;
 
 class GlsShipment extends Shipment
 {
-    private  $notes;
+    private $notes;
 
     public function getNotes(): string
     {

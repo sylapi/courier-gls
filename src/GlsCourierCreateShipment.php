@@ -67,7 +67,7 @@ class GlsCourierCreateShipment implements CourierCreateShipment
             'rcontact'   => $shipment->getReceiver()->getEmail(),
             'date'       => $parameters->postDate ?? date('Y-m-d'),
             'references' => $shipment->getContent(),
-            'notes' => $shipment->getNotes(),
+            'notes'      => $shipment->getNotes(),
             'sendaddr'   => [
                 'name1'   => $shipment->getSender()->getFullName(),
                 'name2'   => '',

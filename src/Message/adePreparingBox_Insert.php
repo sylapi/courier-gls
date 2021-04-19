@@ -64,7 +64,7 @@ class adePreparingBox_Insert
             'notes' => $parameters['options']['note'],
             'quantity' => 1,
             'weight' => $parameters['options']['weight'],
-            'date' => $srs == true ? date(date('Y-m-d', strtotime("+14 days")), time()) : date('Y-m-d'),
+            'date' => $srs == true ? date(date('Y-m-d', strtotime("+21 days")), time()) : date('Y-m-d'),
             'pfc' => 1,
             'sendaddr' => array(
                 'name1' => $parameters['sender']['name'],

@@ -74,7 +74,7 @@ class adePreparingBox_Insert
                 'zipcode' => $parameters['sender']['postcode'],
                 'city'    => $parameters['sender']['city'],
                 'street'  => $parameters['sender']['street'],
-            ],
+            ),
             'srv_bool' => [
                 'cod'        => ($parameters['options']['cod'] == true) ? true : false,
                 'cod_amount' => ($parameters['options']['cod'] == true) ? $parameters['options']['amount'] : '',

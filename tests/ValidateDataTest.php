@@ -63,8 +63,8 @@ class ValidateDataTest extends PHPUnitTestCase
 
         $this->soapMock->expects($this->any())->method('__call')->will(
             $this->returnValue(
-            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA)
-        )
+                simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA)
+            )
         );
 
         $this->gls->setSoapClient($this->soapMock);
@@ -81,8 +81,8 @@ class ValidateDataTest extends PHPUnitTestCase
 
         $this->soapMock->expects($this->any())->method('__call')->will(
             $this->returnValue(
-            simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA)
-        )
+                simplexml_load_string($localXml, 'SimpleXMLElement', LIBXML_NOCDATA)
+            )
         );
 
         $this->gls->setSoapClient($this->soapMock);

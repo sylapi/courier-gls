@@ -12,7 +12,7 @@ class GlsShipment extends Shipment
 {
     private $notes;
 
-    public function getNotes(): string
+    public function getNotes(): ?string
     {
         return $this->notes;
     }

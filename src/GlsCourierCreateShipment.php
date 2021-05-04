@@ -104,10 +104,10 @@ class GlsCourierCreateShipment implements CourierCreateShipment
                 'rname1'   => $shipment->getReceiver()->getFullName(),
                 'rname2'   => '',
                 'rname3'   => '',
-                'rcountry' => $shipment->getReceiver()->getCountry(),
+                'rcountry' => $shipment->getReceiver()->getCountryCode(),
                 'rzipcode' => $shipment->getReceiver()->getZipCode(),
                 'rcity'    => $shipment->getReceiver()->getCity(),
-                'rstreet'  => $shipment->getReceiver()->getCity(),
+                'rstreet'  => $shipment->getReceiver()->getStreet(),
                 'rphone'   => $shipment->getReceiver()->getPhone(),
 
                 'references' => $shipment->getContent(),

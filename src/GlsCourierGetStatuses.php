@@ -23,8 +23,8 @@ class GlsCourierGetStatuses implements CourierGetStatuses
     public function getStatus(string $shipmentId): StatusContract
     {
         $status = new Status(StatusType::APP_UNAVAILABLE);
-        $excaption = new UnavailableMethodException('This service is not available for this courier');
-        ResponseHelper::pushErrorsToResponse($status, [$excaption]);
+        $exception = new UnavailableMethodException('This service is not available for this courier');
+        ResponseHelper::pushErrorsToResponse($status, [$exception]);
 
         return $status;
     }

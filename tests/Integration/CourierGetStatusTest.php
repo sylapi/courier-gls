@@ -2,14 +2,14 @@
 
 namespace Sylapi\Courier\Gls\Tests;
 
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Sylapi\Courier\Enums\StatusType;
 use Sylapi\Courier\Gls\CourierGetStatuses;
-use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Sylapi\Courier\Gls\Tests\Helpers\SessionTrait;
 
 class CourierGetStatusTest extends PHPUnitTestCase
 {
-    use GlsSessionTrait;
+    use SessionTrait;
 
     private $soapMock = null;
     private $sessionMock = null;

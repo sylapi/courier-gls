@@ -26,10 +26,15 @@ class CourierApiFactoryTest extends PHPUnitTestCase
 
     public function testGlsSessionFactory()
     {
-        $glsSessionFactory = new SessionFactory();
-        $glsSession = $glsSessionFactory->session(
-            Parameters::create($this->parameters)
-        );
+        $credentials = [
+            'login' => 'login',
+            'password' => 'password',
+            'sandbox' => true,
+        ];
+
+        $courierApiFactory = new CourierApiFactory(new SessionFactory());
+        $glsSession = $courierApiFactory->create($credentials);
+
         $this->assertInstanceOf(Session::class, $glsSession);
     }
 

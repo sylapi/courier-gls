@@ -3,18 +3,20 @@
 namespace Sylapi\Courier\Gls\Tests;
 
 use SoapFault;
-use Sylapi\Courier\Contracts\Response;
+use Sylapi\Courier\Gls\Responses\Shipment as ResponsesShipment;
 use Sylapi\Courier\Gls\Entities\Parcel;
 use Sylapi\Courier\Gls\Entities\Sender;
 use Sylapi\Courier\Gls\Entities\Receiver;
 use Sylapi\Courier\Gls\Entities\Shipment;
 use Sylapi\Courier\Gls\CourierCreateShipment;
+use Sylapi\Courier\Exceptions\TransportException;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
+use Sylapi\Courier\Gls\Tests\Helpers\SessionTrait;
+
 
 class CourierCreateShipmentTest extends PHPUnitTestCase
 {
-    use GlsSessionTrait;
+    use SessionTrait;
 
     private $soapMock = null;
     private $sessionMock = null;
@@ -55,9 +57,8 @@ class CourierCreateShipmentTest extends PHPUnitTestCase
 
         $response = $glsCourierCreateShipment->createShipment($this->getShipmentMock());
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertObjectHasAttribute('shipmentId', $response);
-        $this->assertNotEmpty($response->shipmentId);
+        $this->assertInstanceOf(ResponsesShipment::class, $response);
+        $this->assertNotEmpty($response->getShipmentId());
     }
 
     public function testCreateShipmentFailure()
@@ -79,9 +80,7 @@ class CourierCreateShipmentTest extends PHPUnitTestCase
 
         $glsCourierCreateShipment = new CourierCreateShipment($this->sessionMock);
 
-        $response = $glsCourierCreateShipment->createShipment($this->getShipmentMock());
-
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertTrue($response->hasErrors());
+        $glsCourierCreateShipment->createShipment($this->getShipmentMock());
+        $this->expectException(TransportException::class);
     }
 }

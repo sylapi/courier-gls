@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
+use Sylapi\Courier\Contracts\Booking;
+use Sylapi\Courier\Gls\Responses\Parcel as ParcelResponse;
+use Sylapi\Courier\Helpers\ResponseHelper;
+use Sylapi\Courier\Exceptions\ValidateException;
+use Sylapi\Courier\Exceptions\TransportException;
+use Sylapi\Courier\Gls\Helpers\ValidateErrorsHelper;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
 use Sylapi\Courier\Contracts\CourierPostShipment as CourierPostShipmentContract;
-use Sylapi\Courier\Contracts\Booking;
-use Sylapi\Courier\Entities\Response;
-use Sylapi\Courier\Exceptions\TransportException;
-use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
-use Sylapi\Courier\Helpers\ResponseHelper;
 
 class CourierPostShipment implements CourierPostShipmentContract
 {
@@ -23,13 +24,10 @@ class CourierPostShipment implements CourierPostShipmentContract
 
     public function postShipment(Booking $booking): ResponseContract
     {
-        $response = new Response();
+        $response = new ParcelResponse();
 
         if (!$booking->validate()) {
-            $errors = GlsValidateErrorsHelper::toArrayExceptions($response->getErrors());
-            ResponseHelper::pushErrorsToResponse($response, $errors);
-
-            return $response;
+            throw new ValidateException('Invalid Shipment: ' . ValidateErrorsHelper::getError($booking->getErrors()));
         }
 
         $client = $this->session->client();
@@ -43,14 +41,12 @@ class CourierPostShipment implements CourierPostShipmentContract
 
         try {
             $result = $client->adePickup_Create($params);
-            $response->shipmentId = $result->return->id;
+            $response->setResponse($result);
+            $response->setShipmentId($result->return->id);
 
             return $response;
         } catch (\SoapFault $fault) {
-            $error = new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
-            ResponseHelper::pushErrorsToResponse($response, [$error]);
-
-            return $response;
+            throw new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
         }
     }
 }

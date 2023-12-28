@@ -7,7 +7,8 @@ namespace Sylapi\Courier\Gls;
 use Sylapi\Courier\Contracts\CourierGetLabels as CourierGetLabelsContract;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
 use Sylapi\Courier\Exceptions\TransportException;
-use Sylapi\Courier\Helpers\ResponseHelper;
+use Sylapi\Courier\Gls\Responses\Label as LabelResponse;
+use Sylapi\Courier\Contracts\LabelType as LabelTypeContract;
 
 class CourierGetLabels implements CourierGetLabelsContract
 {
@@ -18,7 +19,7 @@ class CourierGetLabels implements CourierGetLabelsContract
         $this->session = $session;
     }
 
-    public function getLabel(string $shipmentId): ResponseContract
+    public function getLabel(string $shipmentId, LabelTypeContract $labelType): ResponseContract
     {
         $client = $this->session->client();
         $parameters = $this->session->parameters();
@@ -32,14 +33,10 @@ class CourierGetLabels implements CourierGetLabelsContract
             ];
 
             $result = $client->adePickup_GetLabels($params);
+            return new LabelResponse((string) $result->return->labels);
 
-            return new Label((string) $result->return->labels);
         } catch (\SoapFault $fault) {
-            $label = new Label(null);
-            $excaption = new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
-            ResponseHelper::pushErrorsToResponse($label, [$excaption]);
-
-            return $label;
+            throw new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
         }
     }
 }

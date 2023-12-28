@@ -4,31 +4,22 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
-use SoapClient;
 use SoapFault;
+use SoapClient;
+use Sylapi\Courier\Gls\Entities\Credentials;
 use Sylapi\Courier\Exceptions\InvalidArgumentException;
 
 class Session
 {
-    private $parameters;
+    private $credentials;
     private $token;
     private $client;
 
-    public function __construct(Parameters $parameters)
+    public function __construct(Credentials $credentials)
     {
-        $this->parameters = $parameters;
-        $this->initParameters();
+        $this->credentials = $credentials;
         $this->token = null;
         $this->client = null;
-    }
-
-    public function parameters(): Parameters
-    {
-        return $this->parameters;
-    }
-
-    private function initParameters(): void
-    {
     }
 
     public function token(): string
@@ -51,19 +42,18 @@ class Session
 
     private function initializeSession(): void
     {
-        $this->client = new \SoapClient($this->parameters->apiUrl, ['trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE]);
+        $this->client = new \SoapClient($this->credentials->getApiUrl(), ['trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE]);
         $this->client->soap_defencoding = 'UTF-8';
         $this->client->decode_utf8 = true;
 
         $params = [
-            'user_name'     => $this->parameters->login,
-            'user_password' => $this->parameters->password,
+            'user_name'     => $this->credentials->getLogin(),
+            'user_password' => $this->credentials->getPassword(),
         ];
 
         $result = null;
 
         try {
-            /* @phpstan-ignore-next-line */
             $result = $this->client->adeLogin($params);
         } catch (SoapFault $fault) {
             throw new InvalidArgumentException('GlsSession - Invalid credentials: '.$fault->getMessage().' Code: '.$fault->faultcode);

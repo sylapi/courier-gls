@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sylapi\Courier\Gls;
 
 use Sylapi\Courier\Courier;
+use Sylapi\Courier\Gls\Entities\Credentials;
 
 class CourierApiFactory
 {
@@ -15,10 +16,12 @@ class CourierApiFactory
         $this->glsSessionFactory = $glsSessionFactory;
     }
 
-    public function create(array $parameters): Courier
+    public function create(array $credentials): Courier
     {
+        $credentials = Credentials::from($credentials);
+
         $session = $this->glsSessionFactory
-                    ->session(Parameters::create($parameters));
+                    ->session($credentials);
 
         return new Courier(
             new CourierCreateShipment($session),

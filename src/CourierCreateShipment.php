@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
-use Sylapi\Courier\Contracts\CourierCreateShipment as CourierCreateShipmentContract;
-use Sylapi\Courier\Contracts\Response as ResponseContract;
-use Sylapi\Courier\Contracts\Shipment;
 use Sylapi\Courier\Entities\Response;
-use Sylapi\Courier\Exceptions\TransportException;
-use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
+use Sylapi\Courier\Contracts\Shipment;
 use Sylapi\Courier\Helpers\ResponseHelper;
+use Sylapi\Courier\Exceptions\ValidateException;
+use Sylapi\Courier\Exceptions\TransportException;
+use Sylapi\Courier\Gls\Helpers\ValidateErrorsHelper;
+use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
+use Sylapi\Courier\Contracts\Response as ResponseContract;
+use Sylapi\Courier\Gls\Entities\Shipment as ShipmentEntity;
+use Sylapi\Courier\Gls\Responses\Shipment as ShipmentResponse;
+use Sylapi\Courier\Contracts\CourierCreateShipment as CourierCreateShipmentContract;
 
 class CourierCreateShipment implements CourierCreateShipmentContract
 {
@@ -23,13 +27,13 @@ class CourierCreateShipment implements CourierCreateShipmentContract
 
     public function createShipment(Shipment $shipment): ResponseContract
     {
-        $response = new Response();
-
+        $response = new ShipmentResponse();
+        
+        /**
+         * @var ShipmentEntity $shipment
+         */
         if (!$shipment->validate()) {
-            $errors = GlsValidateErrorsHelper::toArrayExceptions($shipment->getErrors());
-            ResponseHelper::pushErrorsToResponse($response, $errors);
-
-            return $response;
+            throw new ValidateException('Invalid Shipment: ' . ValidateErrorsHelper::getError($shipment->getErrors()));
         }
 
         $client = $this->session->client();
@@ -43,16 +47,16 @@ class CourierCreateShipment implements CourierCreateShipmentContract
 
         try {
             $result = $client->adePreparingBox_Insert($params);
-            $response->shipmentId = $result->return->id;
+            $response->setResponse($result);
+            $response->setShipmentId((string) $result->return->id);
         } catch (\SoapFault $fault) {
-            $excaption = new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
-            ResponseHelper::pushErrorsToResponse($response, [$excaption]);
+            throw new TransportException($fault->faultstring.' Code: '.$fault->faultcode);
         }
 
         return $response;
     }
 
-    private function getConsign(Shipment $shipment): array
+    private function getConsign(ShipmentEntity $shipment): array
     {
         $parameters = $this->session->parameters();
 
@@ -65,9 +69,9 @@ class CourierCreateShipment implements CourierCreateShipmentContract
             'rstreet'    => $shipment->getReceiver()->getStreet(),
             'rphone'     => $shipment->getReceiver()->getPhone(),
             'rcontact'   => $shipment->getReceiver()->getEmail(),
-            'date'       => $parameters->postDate ?? date('Y-m-d'),
+            // 'date'       => $parameters->postDate ?? date('Y-m-d'), //TODO
             'references' => $shipment->getContent(),
-            'notes'      => $shipment->getNotes(), /** @phpstan-ignore-line */
+            'notes'      => $shipment->getNotes(),
             'sendaddr'   => [
                 'name1'   => $shipment->getSender()->getFullName(),
                 'name2'   => '',
@@ -85,6 +89,8 @@ class CourierCreateShipment implements CourierCreateShipmentContract
             ],
         ];
 
+        //TODO: services
+        /*
         if (isset($parameters->services) && is_array($parameters->services)) {
             $consign['srv_bool'] = $parameters->services;
         }
@@ -114,6 +120,7 @@ class CourierCreateShipment implements CourierCreateShipmentContract
                 'weight'     => $shipment->getParcel()->getWeight(),
             ];
         }
+        */
 
         return $consign;
     }

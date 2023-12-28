@@ -22,14 +22,14 @@ class CourierGetLabels implements CourierGetLabelsContract
     public function getLabel(string $shipmentId, LabelTypeContract $labelType): ResponseContract
     {
         $client = $this->session->client();
-        $parameters = $this->session->parameters();
+        // $parameters = $this->session->parameters();
         $token = $this->session->token();
 
         try {
             $params = [
                 'session' => $token,
                 'id'      => $shipmentId,
-                'mode'    => $parameters->getLabelType(),
+                'mode'    => $labelType->getLabelType(),
             ];
 
             $result = $client->adePickup_GetLabels($params);

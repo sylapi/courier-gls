@@ -42,7 +42,7 @@ class CourierPostShipment implements CourierPostShipmentContract
         try {
             $result = $client->adePickup_Create($params);
             $response->setResponse($result);
-            $response->setShipmentId($result->return->id);
+            $response->setShipmentId((string) $result->return->id);
 
             return $response;
         } catch (\SoapFault $fault) {

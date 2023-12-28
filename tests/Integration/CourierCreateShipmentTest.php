@@ -79,8 +79,8 @@ class CourierCreateShipmentTest extends PHPUnitTestCase
                 );
 
         $glsCourierCreateShipment = new CourierCreateShipment($this->sessionMock);
-
-        $glsCourierCreateShipment->createShipment($this->getShipmentMock());
         $this->expectException(TransportException::class);
+        $glsCourierCreateShipment->createShipment($this->getShipmentMock());
+        
     }
 }

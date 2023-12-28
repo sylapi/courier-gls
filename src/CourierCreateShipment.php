@@ -58,7 +58,7 @@ class CourierCreateShipment implements CourierCreateShipmentContract
 
     private function getConsign(ShipmentEntity $shipment): array
     {
-        $parameters = $this->session->parameters();
+        // $parameters = $this->session->parameters();
 
         $consign = [
             'rname1'     => $shipment->getReceiver()->getFirstName(),

@@ -3,7 +3,7 @@
 namespace Sylapi\Courier\Gls\Tests\Integration;
 
 use SoapFault;
-use Sylapi\Courier\Contracts\Response;
+use Sylapi\Courier\Gls\Responses\Parcel as ParcelResponse;
 use Sylapi\Courier\Gls\Entities\Booking;
 use Sylapi\Courier\Gls\CourierPostShipment;
 use Sylapi\Courier\Exceptions\TransportException;
@@ -43,9 +43,9 @@ class CourierPostShipmentTest extends PHPUnitTestCase
 
         $response = $glsCourierPostShipment->postShipment($bookingMock);
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertNotEmpty($response->shipmentId);
-        $this->assertNotEquals($response->shipmentId, $shipmentId);
+        $this->assertInstanceOf(ParcelResponse::class, $response);
+        $this->assertNotEmpty($response->getShipmentId());
+        $this->assertNotEquals($response->getShipmentId(), $shipmentId);
     }
 
     public function testPostShipmentFailure()
@@ -67,10 +67,10 @@ class CourierPostShipmentTest extends PHPUnitTestCase
 
         $shipmentId = (string) rand(1000000, 9999999);
         $bookingMock = $this->getBookingMock($shipmentId);
+        
+        $this->expectException(TransportException::class);
 
         $glsCourierPostShipment = new CourierPostShipment($this->sessionMock);
-
-        $glsCourierPostShipment->postShipment($bookingMock);
-        $this->expectException(TransportException::class);
+        $glsCourierPostShipment->postShipment($bookingMock);   
     }
 }

@@ -12,19 +12,25 @@ use Sylapi\Courier\Gls\Entities\Booking;
 use Sylapi\Courier\Gls\CourierApiFactory;
 use Sylapi\Courier\Gls\Entities\Receiver;
 use Sylapi\Courier\Gls\Entities\Shipment;
+use Sylapi\Courier\Gls\Entities\Credentials;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 
 class CourierApiFactoryTest extends PHPUnitTestCase
 {
-    private $parameters = [
-        'login'           => 'login',
-        'password'        => 'password',
-        'sandbox'         => true,
-        'labelType'       => 'one_label_on_a4_rt_pdf',
-    ];
-
     public function testGlsSessionFactory()
+    {
+        $credentials = new Credentials();
+        $credentials->setLogin('login');
+        $credentials->setPassword('password');
+        $credentials->setSandbox(true);
+        $courierApiFactory = new SessionFactory();
+        $glsSession = $courierApiFactory->session($credentials);
+        
+        $this->assertInstanceOf(Session::class, $glsSession);
+    }
+
+    public function testCourierFactoryCreate()
     {
         $credentials = [
             'login' => 'login',
@@ -32,16 +38,8 @@ class CourierApiFactoryTest extends PHPUnitTestCase
             'sandbox' => true,
         ];
 
-        $courierApiFactory = new CourierApiFactory(new SessionFactory());
-        $glsSession = $courierApiFactory->create($credentials);
-
-        $this->assertInstanceOf(Session::class, $glsSession);
-    }
-
-    public function testCourierFactoryCreate()
-    {
         $glsCourierApiFactory = new CourierApiFactory(new SessionFactory());
-        $courier = $glsCourierApiFactory->create($this->parameters);
+        $courier = $glsCourierApiFactory->create($credentials);
 
         $this->assertInstanceOf(Courier::class, $courier);
         $this->assertInstanceOf(Booking::class, $courier->makeBooking());

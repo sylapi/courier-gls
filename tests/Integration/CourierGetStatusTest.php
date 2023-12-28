@@ -5,6 +5,7 @@ namespace Sylapi\Courier\Gls\Tests;
 use Sylapi\Courier\Enums\StatusType;
 use Sylapi\Courier\Gls\CourierGetStatuses;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Sylapi\Courier\Exceptions\UnavailableMethodException;
 use Sylapi\Courier\Gls\Tests\Helpers\SessionTrait;
 
 class CourierGetStatusTest extends PHPUnitTestCase
@@ -24,11 +25,11 @@ class CourierGetStatusTest extends PHPUnitTestCase
     {
         $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/default.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
+
+        $this->expectException(UnavailableMethodException::class);
         $glsCourierGetStatuses = new CourierGetStatuses($this->sessionMock);
 
         $shippingId = (string) rand(1000000, 9999999);
-        $response = $glsCourierGetStatuses->getStatus($shippingId);
-
-        $this->assertEquals(StatusType::APP_UNAVAILABLE, $response);
+        $glsCourierGetStatuses->getStatus($shippingId);
     }
 }

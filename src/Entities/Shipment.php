@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Sylapi\Courier\Gls;
+namespace Sylapi\Courier\Gls\Entities;
 
 use Rakit\Validation\Validator;
-use Sylapi\Courier\Abstracts\Shipment;
+use Sylapi\Courier\Abstracts\Shipment as ShipmentAbstract;
 use Sylapi\Courier\Contracts\Shipment as ShipmentContract;
 
-class GlsShipment extends Shipment
+class Shipment extends ShipmentAbstract
 {
     private $notes;
 

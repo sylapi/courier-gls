@@ -2,23 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Sylapi\Courier\Gls;
+namespace Sylapi\Courier\Gls\Entities;
 
 use Rakit\Validation\Validator;
-use Sylapi\Courier\Abstracts\Sender;
+use Sylapi\Courier\Abstracts\Receiver as ReceiverAbstract;
 
-class GlsSender extends Sender
+class Receiver extends ReceiverAbstract
 {
     public function validate(): bool
     {
         $rules = [
-            'fullName'    => 'required',
+            'firstName'   => 'required',
+            'surname'     => 'required',
             'countryCode' => 'required|min:2|max:2',
             'city'        => 'required',
             'zipCode'     => 'required',
             'street'      => 'required',
-            'email'       => 'nullable|email',
+            'address'     => 'required',
+            'email'       => 'required|email',
         ];
+
         $data = $this->toArray();
 
         $validator = new Validator();

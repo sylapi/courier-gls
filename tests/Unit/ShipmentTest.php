@@ -2,18 +2,19 @@
 
 namespace Sylapi\Courier\Gls\Tests\Unit;
 
+use Sylapi\Courier\Gls\Entities\Parcel;
+use Sylapi\Courier\Gls\Entities\Sender;
+use Sylapi\Courier\Gls\Entities\Receiver;
+use Sylapi\Courier\Gls\Entities\Shipment;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Sylapi\Courier\Gls\GlsParcel;
-use Sylapi\Courier\Gls\GlsReceiver;
-use Sylapi\Courier\Gls\GlsSender;
-use Sylapi\Courier\Gls\GlsShipment;
 
-class GlsShipmentTest extends PHPUnitTestCase
+
+class ShipmentTest extends PHPUnitTestCase
 {
     public function testNumberOfPackagesIsAlwaysEqualTo1()
     {
-        $parcel = new GlsParcel();
-        $shipment = new GlsShipment();
+        $parcel = new Parcel();
+        $shipment = new Shipment();
         $shipment->setParcel($parcel);
         $shipment->setParcel($parcel);
 
@@ -22,11 +23,11 @@ class GlsShipmentTest extends PHPUnitTestCase
 
     public function testShipmentValidate()
     {
-        $receiver = new GlsReceiver();
-        $sender = new GlsSender();
-        $parcel = new GlsParcel();
+        $receiver = new Receiver();
+        $sender = new Sender();
+        $parcel = new Parcel();
 
-        $shipment = new GlsShipment();
+        $shipment = new Shipment();
         $shipment->setSender($sender)
             ->setReceiver($receiver)
             ->setParcel($parcel);

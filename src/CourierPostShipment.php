@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
-use Sylapi\Courier\Contracts\Booking;
-use Sylapi\Courier\Contracts\CourierPostShipment;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
+use Sylapi\Courier\Contracts\CourierPostShipment as CourierPostShipmentContract;
+use Sylapi\Courier\Contracts\Booking;
 use Sylapi\Courier\Entities\Response;
 use Sylapi\Courier\Exceptions\TransportException;
 use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
 use Sylapi\Courier\Helpers\ResponseHelper;
 
-class GlsCourierPostShipment implements CourierPostShipment
+class CourierPostShipment implements CourierPostShipmentContract
 {
     private $session;
 
-    public function __construct(GlsSession $session)
+    public function __construct(Session $session)
     {
         $this->session = $session;
     }

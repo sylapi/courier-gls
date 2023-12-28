@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Sylapi\Courier\Gls;
+namespace Sylapi\Courier\Gls\Entities;
 
 use Rakit\Validation\Validator;
-use Sylapi\Courier\Abstracts\Parcel;
+use Sylapi\Courier\Abstracts\Booking as BookingAbstract;
 
-class GlsParcel extends Parcel
+class Booking extends BookingAbstract
 {
+
     public function validate(): bool
     {
         $rules = [
-            'weight' => 'required|numeric|min:0.01',
+            'shipmentId' => 'required',
         ];
         $data = [
-            'weight' => $this->getWeight(),
+            'shipmentId' => $this->getShipmentId(),
         ];
 
         $validator = new Validator();

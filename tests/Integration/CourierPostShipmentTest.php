@@ -2,14 +2,14 @@
 
 namespace Sylapi\Courier\Gls\Tests\Integration;
 
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
 use Sylapi\Courier\Contracts\Response;
-use Sylapi\Courier\Gls\GlsBooking;
-use Sylapi\Courier\Gls\GlsCourierPostShipment;
+use Sylapi\Courier\Gls\Entities\Booking;
+use Sylapi\Courier\Gls\CourierPostShipment;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
 
-class GlsCourierPostShipmentTest extends PHPUnitTestCase
+class CourierPostShipmentTest extends PHPUnitTestCase
 {
     use GlsSessionTrait;
 
@@ -24,7 +24,7 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
 
     public function getBookingMock($shipmentId)
     {
-        $bookingMock = $this->createMock(GlsBooking::class);
+        $bookingMock = $this->createMock(Booking::class);
         $bookingMock->method('getShipmentId')->willReturn($shipmentId);
         $bookingMock->method('validate')->willReturn(true);
 
@@ -35,7 +35,7 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
     {
         $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/adePreparingBox_InsertSuccess.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
-        $glsCourierPostShipment = new GlsCourierPostShipment($this->sessionMock);
+        $glsCourierPostShipment = new CourierPostShipment($this->sessionMock);
 
         $shipmentId = (string) rand(1000000, 9999999);
         $bookingMock = $this->getBookingMock($shipmentId);
@@ -69,7 +69,7 @@ class GlsCourierPostShipmentTest extends PHPUnitTestCase
         $shipmentId = (string) rand(1000000, 9999999);
         $bookingMock = $this->getBookingMock($shipmentId);
 
-        $glsCourierPostShipment = new GlsCourierPostShipment($this->sessionMock);
+        $glsCourierPostShipment = new CourierPostShipment($this->sessionMock);
 
         $response = $glsCourierPostShipment->postShipment($bookingMock);
 

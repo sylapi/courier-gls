@@ -8,13 +8,13 @@ use SoapClient;
 use SoapFault;
 use Sylapi\Courier\Exceptions\InvalidArgumentException;
 
-class GlsSession
+class Session
 {
     private $parameters;
     private $token;
     private $client;
 
-    public function __construct(GlsParameters $parameters)
+    public function __construct(Parameters $parameters)
     {
         $this->parameters = $parameters;
         $this->initParameters();
@@ -22,7 +22,7 @@ class GlsSession
         $this->client = null;
     }
 
-    public function parameters(): GlsParameters
+    public function parameters(): Parameters
     {
         return $this->parameters;
     }

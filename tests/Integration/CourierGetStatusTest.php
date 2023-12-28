@@ -4,10 +4,10 @@ namespace Sylapi\Courier\Gls\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Sylapi\Courier\Enums\StatusType;
-use Sylapi\Courier\Gls\GlsCourierGetStatuses;
+use Sylapi\Courier\Gls\CourierGetStatuses;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
 
-class GlsCourierGetStatusTest extends PHPUnitTestCase
+class CourierGetStatusTest extends PHPUnitTestCase
 {
     use GlsSessionTrait;
 
@@ -24,7 +24,7 @@ class GlsCourierGetStatusTest extends PHPUnitTestCase
     {
         $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/default.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
-        $glsCourierGetStatuses = new GlsCourierGetStatuses($this->sessionMock);
+        $glsCourierGetStatuses = new CourierGetStatuses($this->sessionMock);
 
         $shippingId = (string) rand(1000000, 9999999);
         $response = $glsCourierGetStatuses->getStatus($shippingId);

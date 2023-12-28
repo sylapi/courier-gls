@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
-use Sylapi\Courier\Contracts\CourierGetLabels;
-use Sylapi\Courier\Contracts\Label as LabelContract;
-use Sylapi\Courier\Entities\Label;
+use Sylapi\Courier\Contracts\CourierGetLabels as CourierGetLabelsContract;
+use Sylapi\Courier\Contracts\Response as ResponseContract;
 use Sylapi\Courier\Exceptions\TransportException;
 use Sylapi\Courier\Helpers\ResponseHelper;
 
-class GlsCourierGetLabels implements CourierGetLabels
+class CourierGetLabels implements CourierGetLabelsContract
 {
     private $session;
 
-    public function __construct(GlsSession $session)
+    public function __construct(Session $session)
     {
         $this->session = $session;
     }
 
-    public function getLabel(string $shipmentId): LabelContract
+    public function getLabel(string $shipmentId): ResponseContract
     {
         $client = $this->session->client();
         $parameters = $this->session->parameters();

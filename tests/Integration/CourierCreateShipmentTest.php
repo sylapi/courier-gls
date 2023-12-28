@@ -2,17 +2,17 @@
 
 namespace Sylapi\Courier\Gls\Tests;
 
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
 use Sylapi\Courier\Contracts\Response;
-use Sylapi\Courier\Gls\GlsCourierCreateShipment;
-use Sylapi\Courier\Gls\GlsParcel;
-use Sylapi\Courier\Gls\GlsReceiver;
-use Sylapi\Courier\Gls\GlsSender;
-use Sylapi\Courier\Gls\GlsShipment;
+use Sylapi\Courier\Gls\Entities\Parcel;
+use Sylapi\Courier\Gls\Entities\Sender;
+use Sylapi\Courier\Gls\Entities\Receiver;
+use Sylapi\Courier\Gls\Entities\Shipment;
+use Sylapi\Courier\Gls\CourierCreateShipment;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
 
-class GlsCourierCreateShipmentTest extends PHPUnitTestCase
+class CourierCreateShipmentTest extends PHPUnitTestCase
 {
     use GlsSessionTrait;
 
@@ -27,10 +27,10 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
 
     private function getShipmentMock()
     {
-        $senderMock = $this->createMock(GlsSender::class);
-        $receiverMock = $this->createMock(GlsReceiver::class);
-        $parcelMock = $this->createMock(GlsParcel::class);
-        $shipmentMock = $this->createMock(GlsShipment::class);
+        $senderMock = $this->createMock(Sender::class);
+        $receiverMock = $this->createMock(Receiver::class);
+        $parcelMock = $this->createMock(Parcel::class);
+        $shipmentMock = $this->createMock(Shipment::class);
 
         $shipmentMock->method('getSender')
                 ->willReturn($senderMock);
@@ -51,7 +51,7 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
     {
         $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/adePreparingBox_InsertSuccess.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
-        $glsCourierCreateShipment = new GlsCourierCreateShipment($this->sessionMock);
+        $glsCourierCreateShipment = new CourierCreateShipment($this->sessionMock);
 
         $response = $glsCourierCreateShipment->createShipment($this->getShipmentMock());
 
@@ -77,7 +77,7 @@ class GlsCourierCreateShipmentTest extends PHPUnitTestCase
                     )
                 );
 
-        $glsCourierCreateShipment = new GlsCourierCreateShipment($this->sessionMock);
+        $glsCourierCreateShipment = new CourierCreateShipment($this->sessionMock);
 
         $response = $glsCourierCreateShipment->createShipment($this->getShipmentMock());
 

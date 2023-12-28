@@ -6,7 +6,7 @@ namespace Sylapi\Courier\Gls;
 
 use ArrayObject;
 
-class GlsParameters extends ArrayObject
+class Parameters extends ArrayObject
 {
     const DEFAULT_LABEL_TYPE = 'one_label_on_a4_lt_pdf';
 

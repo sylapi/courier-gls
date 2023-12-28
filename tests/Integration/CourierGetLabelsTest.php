@@ -5,10 +5,10 @@ namespace Sylapi\Courier\Gls\Tests;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SoapFault;
 use Sylapi\Courier\Contracts\Response;
-use Sylapi\Courier\Gls\GlsCourierGetLabels;
+use Sylapi\Courier\Gls\CourierGetLabels;
 use Sylapi\Courier\Gls\Tests\Helpers\GlsSessionTrait;
 
-class GlsCourierGetLabelsTest extends PHPUnitTestCase
+class CourierGetLabelsTest extends PHPUnitTestCase
 {
     use GlsSessionTrait;
 
@@ -25,7 +25,7 @@ class GlsCourierGetLabelsTest extends PHPUnitTestCase
     {
         $localXml = simplexml_load_string(file_get_contents(__DIR__.'/Mock/adePickup_GetLabelsSuccess.xml'));
         $this->soapMock->expects($this->any())->method('__call')->will($this->returnValue($localXml));
-        $glsCourierGetLabels = new GlsCourierGetLabels($this->sessionMock);
+        $glsCourierGetLabels = new CourierGetLabels($this->sessionMock);
         $this->assertEquals(
             $glsCourierGetLabels->getLabel((string) rand(1000000, 9999999)),
             'JVBERi0xLjMKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJlbnQgMSAwIFIKL01lZGlhQm94IFswIDAgODQxLjg5IDU5NS4yOF0KL1Jlc291cmNlcyAyIDAgUgovQ29udGVudHMgNCAwIFI'
@@ -48,7 +48,7 @@ class GlsCourierGetLabelsTest extends PHPUnitTestCase
                     )
                 );
 
-        $glsCourierGetLabels = new GlsCourierGetLabels($this->sessionMock);
+        $glsCourierGetLabels = new CourierGetLabels($this->sessionMock);
         $response = $glsCourierGetLabels->getLabel($shippingId);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->hasErrors());

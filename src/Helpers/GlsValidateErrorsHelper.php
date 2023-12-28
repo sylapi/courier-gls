@@ -6,7 +6,7 @@ namespace Sylapi\Courier\Gls\Helpers;
 
 use Sylapi\Courier\Exceptions\ValidateException;
 
-class GlsValidateErrorsHelper
+class ValidateErrorsHelper
 {
     public static function hasErrors(array $errors): bool
     {

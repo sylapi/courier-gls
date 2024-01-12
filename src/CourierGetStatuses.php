@@ -7,10 +7,11 @@ namespace Sylapi\Courier\Gls;
 use Sylapi\Courier\Contracts\CourierGetStatuses as CourierGetStatusesContract;
 use Sylapi\Courier\Exceptions\UnavailableMethodException;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
+use Sylapi\Courier\Exceptions\TransportException;
+use Sylapi\Courier\Gls\Responses\Status as StatusResponse;
 
 class CourierGetStatuses implements CourierGetStatusesContract
 {
-    /* @phpstan-ignore-next-line */
     private $session;
 
     public function __construct(Session $session)
@@ -20,6 +21,28 @@ class CourierGetStatuses implements CourierGetStatusesContract
 
     public function getStatus(string $shipmentId): ResponseContract
     {
-        throw new UnavailableMethodException('Method getStatus is not available for this courier.');
+        $client = $this->session->clientTracking();
+        $credentials = $this->session->credentials();
+
+        $payload = array(
+            'Credentials' => array('UserName' => $credentials->getTrackingLogin(), 'Password' => $credentials->getTrackingPassword()),
+            'RefValue' => $shipmentId
+        );
+        
+        $result = $client->GetTuDetail($payload);
+
+        $histories = $result->History ?? null;
+        
+        if($histories === null || count($histories) === 0) {
+            throw new TransportException('History is available');
+        }
+
+        $history = reset($histories);
+
+        $statusResponse = new StatusResponse((string) new StatusTransformer($history->Code), $history->Desc ?? 'Original status description not found');
+        $statusResponse->setResponse($result);
+        $statusResponse->setRequest($payload);
+
+        return $statusResponse;
     }
 }

@@ -22,6 +22,11 @@ class Session
         $this->client = null;
     }
 
+    public function credentials(): Credentials
+    {
+        return $this->credentials;
+    }
+
     public function token(): string
     {
         if (!$this->token) {
@@ -34,13 +39,18 @@ class Session
     public function client(): SoapClient
     {
         if (!$this->client) {
-            $this->initializeSession();
+            $this->client = $this->initializeSession();
         }
 
         return $this->client;
     }
 
-    private function initializeSession(): void
+    public function clientTracking(): SoapClient
+    {
+        return new \SoapClient($this->credentials->getTrackingApiUrl(), ['trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE]);
+    }
+
+    private function initializeSession(): SoapClient
     {
         $this->client = new \SoapClient($this->credentials->getApiUrl(), ['trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE]);
         $this->client->soap_defencoding = 'UTF-8';
@@ -64,5 +74,7 @@ class Session
         }
 
         $this->token = $result->return->session;
+
+        return $this->client;
     }
 }

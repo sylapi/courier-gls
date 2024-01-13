@@ -11,6 +11,7 @@ use Sylapi\Courier\Gls\Entities\Shipment;
 use Sylapi\Courier\Gls\CourierCreateShipment;
 use Sylapi\Courier\Exceptions\TransportException;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Sylapi\Courier\Gls\Entities\Options;
 use Sylapi\Courier\Gls\Tests\Helpers\SessionTrait;
 
 
@@ -32,6 +33,7 @@ class CourierCreateShipmentTest extends PHPUnitTestCase
         $senderMock = $this->createMock(Sender::class);
         $receiverMock = $this->createMock(Receiver::class);
         $parcelMock = $this->createMock(Parcel::class);
+        $optionsMock = $this->createMock(Options::class);
         $shipmentMock = $this->createMock(Shipment::class);
 
         $shipmentMock->method('getSender')
@@ -42,6 +44,9 @@ class CourierCreateShipmentTest extends PHPUnitTestCase
 
         $shipmentMock->method('getParcel')
                 ->willReturn($parcelMock);
+
+        $shipmentMock->method('getOptions')
+                ->willReturn($optionsMock);                
 
         $shipmentMock->method('validate')
                 ->willReturn(true);

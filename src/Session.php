@@ -52,9 +52,12 @@ class Session
 
     private function initializeSession(): SoapClient
     {
-        $this->client = new \SoapClient($this->credentials->getApiUrl(), ['trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE]);
-        $this->client->soap_defencoding = 'UTF-8';
-        $this->client->decode_utf8 = true;
+        $this->client = new \SoapClient($this->credentials->getApiUrl(), [
+            'trace' => 1, 
+            'cache_wsdl' => WSDL_CACHE_NONE, 
+            'soap_defencoding' => 'UTF-8',
+            'decode_utf8' => true
+        ]);
 
         $params = [
             'user_name'     => $this->credentials->getLogin(),

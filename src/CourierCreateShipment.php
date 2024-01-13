@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Sylapi\Courier\Gls;
 
-use Sylapi\Courier\Entities\Response;
 use Sylapi\Courier\Contracts\Shipment;
-use Sylapi\Courier\Helpers\ResponseHelper;
 use Sylapi\Courier\Exceptions\ValidateException;
 use Sylapi\Courier\Exceptions\TransportException;
 use Sylapi\Courier\Gls\Helpers\ValidateErrorsHelper;
-use Sylapi\Courier\Gls\Helpers\GlsValidateErrorsHelper;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
 use Sylapi\Courier\Gls\Entities\Shipment as ShipmentEntity;
 use Sylapi\Courier\Gls\Responses\Shipment as ShipmentResponse;
 use Sylapi\Courier\Contracts\CourierCreateShipment as CourierCreateShipmentContract;
+use Sylapi\Courier\Gls\Services\Srs;
 
 class CourierCreateShipment implements CourierCreateShipmentContract
 {
@@ -58,7 +56,10 @@ class CourierCreateShipment implements CourierCreateShipmentContract
 
     private function getConsign(ShipmentEntity $shipment): array
     {
-        // $parameters = $this->session->parameters();
+        /**
+         * @var Options $options
+         */
+        $options = $shipment->getOptions();
 
         $consign = [
             'rname1'     => $shipment->getReceiver()->getFirstName(),
@@ -69,7 +70,7 @@ class CourierCreateShipment implements CourierCreateShipmentContract
             'rstreet'    => $shipment->getReceiver()->getStreet(),
             'rphone'     => $shipment->getReceiver()->getPhone(),
             'rcontact'   => $shipment->getReceiver()->getEmail(),
-            // 'date'       => $parameters->postDate ?? date('Y-m-d'), //TODO
+            'date'       => $options->getPostDate(),
             'references' => $shipment->getContent(),
             'notes'      => $shipment->getNotes(),
             'sendaddr'   => [
@@ -89,38 +90,19 @@ class CourierCreateShipment implements CourierCreateShipmentContract
             ],
         ];
 
-        //TODO: services
-        /*
-        if (isset($parameters->services) && is_array($parameters->services)) {
-            $consign['srv_bool'] = $parameters->services;
-        }
+        $services = $shipment->getServices();
+        
+        if($services) {
+            foreach($services as $service) {
+                $service->setRequest($consign);
 
-        if (isset($parameters->services)
-            && is_array($parameters->services)
-            && isset($parameters->services['srs'])
-        ) {
-            $consign['srv_ppe'] = [
-                'sname1'   => $shipment->getSender()->getFullName(),
-                'scountry' => $shipment->getSender()->getCountryCode(),
-                'szipcode' => $shipment->getSender()->getZipCode(),
-                'scity'    => $shipment->getSender()->getCity(),
-                'sstreet'  => $shipment->getSender()->getStreet(),
-                'sphone'   => $shipment->getSender()->getPhone(),
+                if($service instanceof Srs) {
+                    $service->setShipment($shipment);
+                } 
+                $consign = $service->handle();
+            }
+        } 
 
-                'rname1'   => $shipment->getReceiver()->getFullName(),
-                'rname2'   => '',
-                'rname3'   => '',
-                'rcountry' => $shipment->getReceiver()->getCountryCode(),
-                'rzipcode' => $shipment->getReceiver()->getZipCode(),
-                'rcity'    => $shipment->getReceiver()->getCity(),
-                'rstreet'  => $shipment->getReceiver()->getStreet(),
-                'rphone'   => $shipment->getReceiver()->getPhone(),
-
-                'references' => $shipment->getContent(),
-                'weight'     => $shipment->getParcel()->getWeight(),
-            ];
-        }
-        */
 
         return $consign;
     }

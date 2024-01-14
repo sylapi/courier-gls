@@ -4,9 +4,6 @@ namespace Sylapi\Courier\Gls\Services;
 
 use InvalidArgumentException;
 
-use Sylapi\Courier\Gls\Entities\Shipment;
-
-
 use Sylapi\Courier\Abstracts\Services\COD as CODAbstract;
 
 class COD extends CODAbstract

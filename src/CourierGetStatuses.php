@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Sylapi\Courier\Gls;
 
 use Sylapi\Courier\Contracts\CourierGetStatuses as CourierGetStatusesContract;
-use Sylapi\Courier\Exceptions\UnavailableMethodException;
 use Sylapi\Courier\Contracts\Response as ResponseContract;
 use Sylapi\Courier\Exceptions\TransportException;
 use Sylapi\Courier\Gls\Responses\Status as StatusResponse;
+use Sylapi\Courier\Responses\Status as ResponseStatus;
 
 class CourierGetStatuses implements CourierGetStatusesContract
 {
@@ -19,7 +19,7 @@ class CourierGetStatuses implements CourierGetStatusesContract
         $this->session = $session;
     }
 
-    public function getStatus(string $shipmentId): ResponseContract
+    public function getStatus(string $shipmentId): ResponseStatus
     {
         $client = $this->session->clientTracking();
         $credentials = $this->session->credentials();

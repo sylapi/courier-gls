@@ -29,7 +29,7 @@ class Shipment extends ShipmentResponse
         }
 
         $booking = new Booking();
-        $booking->setShipmentId($this->getResponse()->getShipmentId());
+        $booking->setShipmentId($this->getShipmentId());
 
         return $booking;
 

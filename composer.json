@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=8.2.0",
-        "sylapi/courier": "dev-dev-v3",
+        "sylapi/courier": "v3.0.0",
         "rakit/validation": "^1.4"
     },
     "require-dev": {

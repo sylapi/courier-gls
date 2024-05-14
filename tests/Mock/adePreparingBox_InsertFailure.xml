@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<adePreparingBox_InsertResponse>
-    <faultcode>err_cons_receiver_name1_empty</faultcode>
-    <faultstring>id: 0</faultstring>
-    <faultactor>adePreparingBox_Insert</faultactor>
-    <detail></detail>
-</adePreparingBox_InsertResponse>

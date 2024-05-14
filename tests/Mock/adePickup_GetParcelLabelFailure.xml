@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<adePickup_GetParcelLabelResponse>
-    <faultcode>err_parcel_number_is_invalid</faultcode>
-    <faultstring>num: 266800066204 mode: roll_160x100_pdf</faultstring>
-    <faultactor>adePickup_GetParcelLabel</faultactor>
-    <detail></detail>
-</adePickup_GetParcelLabelResponse>

@@ -9,7 +9,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.2'
           extensions: mbstring, intl
           ini-values: post_max_size=256M, log_errors=1
           coverage: xdebug
@@ -20,8 +20,6 @@ jobs:
         run: phpstan analyse src tests               
       - name: Run test suite
         run: vendor/bin/phpunit
-      - name: Run test coverage
-        run: vendor/bin/phpunit --verbose --coverage-text
       - name: Run test coverage.xml
         run: vendor/bin/phpunit --coverage-clover coverage.xml         
       - uses: codecov/codecov-action@v1

@@ -32,7 +32,7 @@ class CourierGetLabels implements CourierGetLabelsContract
             ];
 
             $result = $client->adePickup_GetLabels($params);
-            return new LabelResponse((string) $result->return->labels);
+            return new LabelResponse(base64_decode((string) $result->return->labels));
 
         } catch (\SoapFault $fault) {
             throw new TransportException($fault->faultstring.' Code: '.$fault->faultcode);

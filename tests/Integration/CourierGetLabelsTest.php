@@ -31,7 +31,7 @@ class CourierGetLabelsTest extends PHPUnitTestCase
         $labelTypeMock = $this->createMock(LabelType::class);
         $this->assertEquals(
             $glsCourierGetLabels->getLabel((string) rand(1000000, 9999999), $labelTypeMock),
-            'JVBERi0xLjMKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJlbnQgMSAwIFIKL01lZGlhQm94IFswIDAgODQxLjg5IDU5NS4yOF0KL1Jlc291cmNlcyAyIDAgUgovQ29udGVudHMgNCAwIFI'
+            base64_decode('JVBERi0xLjMKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJlbnQgMSAwIFIKL01lZGlhQm94IFswIDAgODQxLjg5IDU5NS4yOF0KL1Jlc291cmNlcyAyIDAgUgovQ29udGVudHMgNCAwIFI')
         );
     }
 

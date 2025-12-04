@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=8.2.0",
+        "php": ">=8.0.0",
         "sylapi/courier": "^3.0",
         "rakit/validation": "^1.4"
     },
